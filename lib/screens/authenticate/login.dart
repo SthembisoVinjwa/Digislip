@@ -68,7 +68,7 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                 alignment: Alignment.center,
                 child: CircularProgressIndicator(
                   strokeWidth: 5.0,
-                  color: Theme.of(context).canvasColor,
+                  color: Theme.of(context).primaryColor,
                 )),
           );
         });
@@ -81,9 +81,40 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
         showMessage(error, 'Not found');
       }
     } catch (e) {
+      print(e);
       Navigator.of(context).pop();
       error = 'User does not exist.';
       showMessage(error, 'Not found');
+    }
+  }
+
+  Future<void> signInWithGoogle() async {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Material(
+            type: MaterialType.transparency,
+            child: Container(
+                alignment: Alignment.center,
+                child: CircularProgressIndicator(
+                  strokeWidth: 5.0,
+                  color: Theme.of(context).primaryColor,
+                )),
+          );
+        });
+
+    try {
+      dynamic result = await _auth.signInWithGoogle();
+      Navigator.of(context).pop();
+      if (result == null) {
+        error = 'Could not sign in with Google.';
+        showMessage(error, 'Google Sign in');
+      }
+    } catch (e) {
+      print(e);
+      Navigator.of(context).pop();
+      error = 'Could not sign in with Google.';
+      showMessage(error, 'Google Sign in');
     }
   }
 
@@ -94,6 +125,7 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        centerTitle: true,
         elevation: 0,
         backgroundColor: Theme.of(context).canvasColor,
         title: Row(
@@ -312,8 +344,7 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                                     Expanded(
                                         child: ElevatedButton.icon(
                                       onPressed: () async {
-                                        print('Google');
-                                        await _auth.signInWithGoogle();
+                                        await signInWithGoogle();
                                       },
                                       icon: Image.asset('assets/google.png',
                                           height: 35),

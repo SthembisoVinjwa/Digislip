@@ -67,7 +67,7 @@ class _RegisterState extends State<Register> with WidgetsBindingObserver {
                 alignment: Alignment.center,
                 child: CircularProgressIndicator(
                   strokeWidth: 5.0,
-                  color: Theme.of(context).canvasColor,
+                  color: Theme.of(context).primaryColor,
                 )),
           );
         });
@@ -92,6 +92,7 @@ class _RegisterState extends State<Register> with WidgetsBindingObserver {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0,
+        backgroundColor: Theme.of(context).canvasColor,
         title: Row(
           children: const [
             Icon(

@@ -23,10 +23,10 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          unselectedWidgetColor: Colors.white,
           brightness: Brightness.light,
           primaryColor: const Color(0xFF234F1E),
-          canvasColor: const Color(0xFF5DBB63),
+          canvasColor: const Color(0xFF028A0F),
+          cardColor: Colors.white,
           colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.green)
               .copyWith(secondary: const Color(0xFF5DBB63)),
         ),

@@ -325,7 +325,7 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                                       style: ButtonStyle(
                                         overlayColor:
                                             MaterialStateProperty.all<Color>(
-                                                Colors.deepPurple.shade50),
+                                                Theme.of(context).canvasColor.withOpacity(0.1)),
                                         backgroundColor:
                                             MaterialStateProperty.all<Color>(
                                                 Colors.white),
@@ -372,7 +372,7 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                                       style: ButtonStyle(
                                         overlayColor:
                                             MaterialStateProperty.all<Color>(
-                                                Colors.deepPurple.shade50),
+                                                Theme.of(context).canvasColor.withOpacity(0.1)),
                                         backgroundColor:
                                             MaterialStateProperty.all<Color>(
                                                 Colors.white),
@@ -416,7 +416,7 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                                       style: ButtonStyle(
                                         overlayColor:
                                             MaterialStateProperty.all<Color>(
-                                                Colors.deepPurple.shade50),
+                                                Theme.of(context).canvasColor.withOpacity(0.1)),
                                         backgroundColor:
                                             MaterialStateProperty.all<Color>(
                                                 Colors.white),

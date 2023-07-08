@@ -22,13 +22,11 @@ class MyApp extends StatelessWidget {
       initialData: null,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'DigiSlips',
         theme: ThemeData(
           unselectedWidgetColor: Colors.white,
           brightness: Brightness.light,
           primaryColor: const Color(0xFF234F1E),
-          canvasColor: Colors.green,
-          cardColor: Colors.white,
+          canvasColor: const Color(0xFF5DBB63),
           colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.green)
               .copyWith(secondary: const Color(0xFF5DBB63)),
         ),

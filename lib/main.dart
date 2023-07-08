@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       initialData: null,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'MoAfrika-Translate',
+        title: 'DigiSlips',
         theme: ThemeData(
           unselectedWidgetColor: Colors.white,
           brightness: Brightness.light,

@@ -64,9 +64,16 @@ class _RegisterState extends State<Register> with WidgetsBindingObserver {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0,
+        title: Row(
+          children: const [
+            Icon(Icons.receipt_long, size: 28,),
+            SizedBox(width: 2,),
+            Text('DigiSlips', style: TextStyle(fontSize: 16),)
+          ],
+        ),
         actions: [
           IconButton(
-            icon: Icon(Icons.exit_to_app),
+            icon: Icon(Icons.exit_to_app, size: 28,),
             onPressed: () {
               SystemNavigator.pop();
             },
@@ -107,7 +114,7 @@ class _RegisterState extends State<Register> with WidgetsBindingObserver {
                   ),
                 )),
             Expanded(
-                flex: 10,
+                flex: 9,
                 child: Form(
                   key: _formKey,
                   child: Container(

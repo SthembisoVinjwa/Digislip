@@ -67,9 +67,24 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Theme.of(context).canvasColor,
+        title: Row(
+          children: const [
+            Icon(Icons.receipt_long, size: 28),
+            SizedBox(
+              width: 2,
+            ),
+            Text(
+              'DigiSlips',
+              style: TextStyle(fontSize: 16),
+            )
+          ],
+        ),
         actions: [
           IconButton(
-            icon: Icon(Icons.exit_to_app),
+            icon: Icon(
+              Icons.exit_to_app,
+              size: 28,
+            ),
             onPressed: () {
               SystemNavigator.pop();
             },
@@ -81,9 +96,11 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Expanded(
-                flex: 3,
+                flex: (_emailError || _passwordError) ? 2 : 3,
                 child: Container(
-                  padding: const EdgeInsets.only(left: 30.0, bottom: 30.0),
+                  padding: EdgeInsets.only(
+                      left: 30.0,
+                      bottom: (_emailError || _passwordError) ? 10.0 : 30.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -109,12 +126,12 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                   ),
                 )),
             Expanded(
-                flex: 10,
+                flex: 9,
                 child: Form(
                   key: _formKey,
                   child: Container(
                     color: Theme.of(context).cardColor,
-                    padding: const EdgeInsets.only(top: 30.0),
+                    padding: const EdgeInsets.only(top: 10.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
@@ -266,90 +283,139 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                             alignment: Alignment.topCenter,
                             padding: const EdgeInsets.only(
                                 top: 15, right: 15, left: 15),
-                            child: Row(
+                            child: Column(
                               children: [
-                                Expanded(
-                                    child: ElevatedButton.icon(
-                                  onPressed: () async {
-                                    print('Google');
-                                    await _auth.signInWithGoogle();
-                                  },
-                                  icon: Image.asset('assets/google.png',
-                                      height: 35),
-                                  label: const Text(
-                                    'Google',
-                                    style: TextStyle(
-                                        color: Colors.black, fontSize: 16),
-                                  ),
-                                  style: ButtonStyle(
-                                    overlayColor:
-                                        MaterialStateProperty.all<Color>(
-                                            Colors.deepPurple.shade50),
-                                    backgroundColor:
-                                        MaterialStateProperty.all<Color>(
-                                            Colors.white),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        side: const BorderSide(
-                                            color: Colors.grey),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                        child: ElevatedButton.icon(
+                                      onPressed: () async {
+                                        print('Google');
+                                        await _auth.signInWithGoogle();
+                                      },
+                                      icon: Image.asset('assets/google.png',
+                                          height: 35),
+                                      label: const Text(
+                                        'Google',
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 16),
+                                      ),
+                                      style: ButtonStyle(
+                                        overlayColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Colors.deepPurple.shade50),
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Colors.white),
+                                        shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            side: const BorderSide(
+                                                color: Colors.grey),
+                                          ),
+                                        ),
+                                        elevation:
+                                            MaterialStateProperty.all<double>(
+                                                0.0),
+                                        minimumSize:
+                                            MaterialStateProperty.all<Size>(
+                                                const Size.fromHeight(55)),
+                                      ),
+                                    )),
+                                    const Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 8.0),
+                                      child: Text(
+                                        '',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey,
+                                        ),
                                       ),
                                     ),
-                                    elevation:
-                                        MaterialStateProperty.all<double>(0.0),
-                                    minimumSize:
-                                        MaterialStateProperty.all<Size>(
-                                            const Size.fromHeight(55)),
-                                  ),
-                                )),
-                                const Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: Text(
-                                    '',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
+                                    Expanded(
+                                        child: ElevatedButton.icon(
+                                      onPressed: () {
+                                        print('Facebook');
+                                      },
+                                      icon: Image.asset('assets/facebook.png',
+                                          height: 35),
+                                      label: const Text(
+                                        'Facebook',
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 16),
+                                      ),
+                                      style: ButtonStyle(
+                                        overlayColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Colors.deepPurple.shade50),
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Colors.white),
+                                        shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            side: const BorderSide(
+                                                color: Colors.grey),
+                                          ),
+                                        ),
+                                        elevation:
+                                            MaterialStateProperty.all<double>(
+                                                0.0),
+                                        minimumSize:
+                                            MaterialStateProperty.all<Size>(
+                                                const Size.fromHeight(55)),
+                                      ),
+                                    )),
+                                  ],
                                 ),
-                                Expanded(
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                if (!_isIphone)
+                                  SizedBox(
+                                    width: 180,
+                                    height: 54,
                                     child: ElevatedButton.icon(
-                                  onPressed: () {
-                                    print('Facebook');
-                                  },
-                                  icon: Image.asset('assets/facebook.png',
-                                      height: 35),
-                                  label: const Text(
-                                    'Facebook',
-                                    style: TextStyle(
-                                        color: Colors.black, fontSize: 16),
-                                  ),
-                                  style: ButtonStyle(
-                                    overlayColor:
-                                        MaterialStateProperty.all<Color>(
-                                            Colors.deepPurple.shade50),
-                                    backgroundColor:
-                                        MaterialStateProperty.all<Color>(
-                                            Colors.white),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        side: const BorderSide(
-                                            color: Colors.grey),
+                                      onPressed: () async {
+                                        print('Apple');
+                                      },
+                                      icon: Image.asset('assets/apple.png',
+                                          height: 35),
+                                      label: const Text(
+                                        'Apple',
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 16),
+                                      ),
+                                      style: ButtonStyle(
+                                        overlayColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Colors.deepPurple.shade50),
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Colors.white),
+                                        shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            side: const BorderSide(
+                                                color: Colors.grey),
+                                          ),
+                                        ),
+                                        elevation:
+                                            MaterialStateProperty.all<double>(
+                                                0.0),
+                                        minimumSize:
+                                            MaterialStateProperty.all<Size>(
+                                                const Size.fromHeight(55)),
                                       ),
                                     ),
-                                    elevation:
-                                        MaterialStateProperty.all<double>(0.0),
-                                    minimumSize:
-                                        MaterialStateProperty.all<Size>(
-                                            const Size.fromHeight(55)),
                                   ),
-                                )),
                               ],
                             ),
                           ),

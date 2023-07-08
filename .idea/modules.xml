@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/digislip.iml" filepath="$PROJECT_DIR$/digislip.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android/digislip_android.iml" filepath="$PROJECT_DIR$/android/digislip_android.iml" />
     </modules>
   </component>
 </project>

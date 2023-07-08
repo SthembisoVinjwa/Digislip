@@ -1,0 +1,126 @@
+{
+  "project_info": {
+    "project_number": "387738697274",
+    "project_id": "digislips-78fcb",
+    "storage_bucket": "digislips-78fcb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:387738697274:android:cf619ca6a4d17c2e0fff03",
+        "android_client_info": {
+          "package_name": "com.digislips.co.nz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "387738697274-6k7802u3rdqqplgr16daju2qp0r3jj0n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.digislips.co.nz",
+            "certificate_hash": "3c4429c0c8112e8540f68ef147128cf1eeb51ebf"
+          }
+        },
+        {
+          "client_id": "387738697274-emp2jtn56t2b183b6erq5lo6fb6o34t5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANuhk2A7csw6kj7uHaqvV3DkwVnnVNh0E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "387738697274-6pr6a2hei5v1dtvmokc88glapp8r6989.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "387738697274-rrrgbkqnvn3j1koiihrsrpvkqldsb11f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.login"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:387738697274:android:031083ed2a9666630fff03",
+        "android_client_info": {
+          "package_name": "com.example.login"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "387738697274-emp2jtn56t2b183b6erq5lo6fb6o34t5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANuhk2A7csw6kj7uHaqvV3DkwVnnVNh0E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "387738697274-6pr6a2hei5v1dtvmokc88glapp8r6989.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "387738697274-rrrgbkqnvn3j1koiihrsrpvkqldsb11f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.login"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:387738697274:android:b082bf2c3c832b970fff03",
+        "android_client_info": {
+          "package_name": "com.naw.digislips"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "387738697274-emp2jtn56t2b183b6erq5lo6fb6o34t5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANuhk2A7csw6kj7uHaqvV3DkwVnnVNh0E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "387738697274-6pr6a2hei5v1dtvmokc88glapp8r6989.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "387738697274-rrrgbkqnvn3j1koiihrsrpvkqldsb11f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.login"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

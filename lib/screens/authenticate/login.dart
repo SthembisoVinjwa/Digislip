@@ -58,6 +58,35 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
     );
   }
 
+  Future<void> signInWithEmail(String email, String password) async {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Material(
+            type: MaterialType.transparency,
+            child: Container(
+                alignment: Alignment.center,
+                child: CircularProgressIndicator(
+                  strokeWidth: 5.0,
+                  color: Theme.of(context).canvasColor,
+                )),
+          );
+        });
+
+    try {
+      dynamic result = await _auth.SignInEmailAndPassword(email, password);
+      Navigator.of(context).pop();
+      if (result == null) {
+        error = 'User does not exist.';
+        showMessage(error, 'Not found');
+      }
+    } catch (e) {
+      Navigator.of(context).pop();
+      error = 'User does not exist.';
+      showMessage(error, 'Not found');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<CustomUser?>(context);
@@ -81,7 +110,7 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
         ),
         actions: [
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.exit_to_app,
               size: 28,
             ),
@@ -233,15 +262,8 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                           child: MainButton(
                             onTap: () async {
                               if (_formKey.currentState!.validate()) {
-                                print('Sign In');
-                                dynamic result =
-                                    await _auth.SignInEmailAndPassword(
-                                        _emailController.text,
-                                        _passwordController.text);
-                                if (result == null) {
-                                  error = 'User does not exist';
-                                  showMessage(error, 'Not found');
-                                }
+                                await signInWithEmail(_emailController.text,
+                                    _passwordController.text);
                               }
                             },
                             color: Theme.of(context).canvasColor,
@@ -373,10 +395,10 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                                     )),
                                   ],
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 20,
                                 ),
-                                if (!_isIphone)
+                                if (_isIphone)
                                   SizedBox(
                                     width: 180,
                                     height: 54,

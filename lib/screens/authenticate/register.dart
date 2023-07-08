@@ -38,8 +38,8 @@ class _RegisterState extends State<Register> with WidgetsBindingObserver {
       actions: [
         ElevatedButton(
             style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all<Color>(Theme.of(context).canvasColor)),
+                backgroundColor: MaterialStateProperty.all<Color>(
+                    Theme.of(context).canvasColor)),
             onPressed: () {
               Navigator.of(context).pop();
             },
@@ -57,23 +57,62 @@ class _RegisterState extends State<Register> with WidgetsBindingObserver {
     );
   }
 
+  Future<void> registerInWithEmail(String email, String password) async {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Material(
+            type: MaterialType.transparency,
+            child: Container(
+                alignment: Alignment.center,
+                child: CircularProgressIndicator(
+                  strokeWidth: 5.0,
+                  color: Theme.of(context).canvasColor,
+                )),
+          );
+        });
+
+    try {
+      dynamic result = await _auth.RegisterEmailAndPassword(email, password);
+      Navigator.of(context).pop();
+      if (result == null) {
+        error = 'Could not create account. Enter a valid email.';
+        showMessage(error, 'Not valid');
+      }
+    } catch (e) {
+      Navigator.of(context).pop();
+      error = 'Could not create account. Enter a valid email.';
+      showMessage(error, 'Not valid');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0,
         title: Row(
           children: const [
-            Icon(Icons.receipt_long, size: 28,),
-            SizedBox(width: 2,),
-            Text('DigiSlips', style: TextStyle(fontSize: 16),)
+            Icon(
+              Icons.receipt_long,
+              size: 28,
+            ),
+            SizedBox(
+              width: 2,
+            ),
+            Text(
+              'DigiSlips',
+              style: TextStyle(fontSize: 16),
+            )
           ],
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.exit_to_app, size: 28,),
+            icon: const Icon(
+              Icons.exit_to_app,
+              size: 28,
+            ),
             onPressed: () {
               SystemNavigator.pop();
             },
@@ -259,25 +298,14 @@ class _RegisterState extends State<Register> with WidgetsBindingObserver {
                           padding: const EdgeInsets.only(top: 15),
                           child: MainButton(
                             onTap: () async {
-                              if (_formKey.currentState!.validate()) {
-                                // Register user
-                                dynamic result =
-                                    await _auth.RegisterEmailAndPassword(
-                                        _emailController.text,
-                                        _passwordController.text);
-                                if (result == null) {
-                                  error =
-                                      'Could not create account. Enter a valid email.';
-                                  showMessage(error, 'Not valid');
-                                }
-                              }
+                              await registerInWithEmail(_emailController.text,
+                                  _passwordController.text);
                             },
                             color: Theme.of(context).canvasColor,
                             title: 'Register',
                           ),
                         ),
-                        Expanded(child: Container(
-                        )),
+                        Expanded(child: Container()),
                         Align(
                           alignment: Alignment.bottomCenter,
                           child: Container(
@@ -301,13 +329,15 @@ class _RegisterState extends State<Register> with WidgetsBindingObserver {
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 16,
-                                              color: Theme.of(context).canvasColor),
+                                              color: Theme.of(context)
+                                                  .canvasColor),
                                         ))
                                   ],
                                 ),
                                 const Text(
                                   '2023 - Copyright - DigiSlips',
-                                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 16),
                                 ),
                               ],
                             ),

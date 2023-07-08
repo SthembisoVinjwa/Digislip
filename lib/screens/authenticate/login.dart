@@ -125,32 +125,41 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        centerTitle: true,
         elevation: 0,
-        backgroundColor: Theme.of(context).canvasColor,
-        title: Row(
-          children: const [
-            Icon(Icons.receipt_long, size: 28),
-            SizedBox(
-              width: 2,
+        backgroundColor: Theme.of(context).primaryColor,
+        centerTitle: true,
+        title: Stack(
+          alignment: Alignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.receipt_long, size: 28),
+                SizedBox(width: 2),
+                Text(
+                  'DigiSlips',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
             ),
-            Text(
-              'DigiSlips',
-              style: TextStyle(fontSize: 16),
-            )
+            Positioned(
+              right: -10,
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(
+                      Icons.exit_to_app_rounded,
+                      size: 28,
+                    ),
+                    onPressed: () {
+                      SystemNavigator.pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.exit_to_app,
-              size: 28,
-            ),
-            onPressed: () {
-              SystemNavigator.pop();
-            },
-          ),
-        ],
       ),
       body: SafeArea(
         child: Column(

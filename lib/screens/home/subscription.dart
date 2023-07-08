@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../../services/auth.dart';
 
-class Reciepts extends StatefulWidget {
-  const Reciepts({Key? key}) : super(key: key);
+class Subscription extends StatefulWidget {
+  const Subscription({Key? key}) : super(key: key);
 
   @override
-  State<Reciepts> createState() => _RecieptsState();
+  State<Subscription> createState() => _SubscriptionState();
 }
 
-class _RecieptsState extends State<Reciepts> {
+class _SubscriptionState extends State<Subscription> {
   final AuthService _auth = AuthService();
 
   @override
@@ -20,7 +20,7 @@ class _RecieptsState extends State<Reciepts> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Receipts'),
+            Text('Subscription'),
             TextButton(
               onPressed: () async {
                 await _auth.signOut();

@@ -1,7 +1,7 @@
 import 'package:digislip/screens/home/dashboard.dart';
 import 'package:digislip/screens/home/menu.dart';
 import 'package:digislip/screens/home/profile.dart';
-import 'package:digislip/screens/home/reciepts.dart';
+import 'package:digislip/screens/home/subscription.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../services/auth.dart';
@@ -21,7 +21,7 @@ class _HomeState extends State<Home> {
   final screens = <Widget>[
     const Menu(),
     const Dashboard(),
-    const Reciepts(),
+    const Subscription(),
     const Profile()
   ];
 
@@ -72,8 +72,8 @@ class _HomeState extends State<Home> {
                   label: 'Home',
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.receipt_rounded, size: 28, color: Colors.white),
-                  label: 'Receipts',
+                  icon: Icon(Icons.check_circle_rounded, size: 28, color: Colors.white),
+                  label: 'Subscription',
                 ),
                 NavigationDestination(
                   icon: Icon(Icons.person_2_rounded, size: 28, color: Colors.white),

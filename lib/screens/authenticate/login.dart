@@ -89,30 +89,38 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
   }
 
   Future<void> signInWithGoogle() async {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return Material(
-            type: MaterialType.transparency,
-            child: Container(
-                alignment: Alignment.center,
-                child: CircularProgressIndicator(
-                  strokeWidth: 5.0,
-                  color: Theme.of(context).primaryColor,
-                )),
-          );
-        });
+    if (mounted) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return Material(
+              type: MaterialType.transparency,
+              child: Container(
+                  alignment: Alignment.center,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 5.0,
+                    color: Theme
+                        .of(context)
+                        .primaryColor,
+                  )),
+            );
+          });
+    }
 
     try {
       dynamic result = await _auth.signInWithGoogle();
-      Navigator.of(context).pop();
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
       if (result == null) {
         error = 'Could not sign in with Google.';
         showMessage(error, 'Google Sign in');
       }
     } catch (e) {
       print(e);
-      Navigator.of(context).pop();
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
       error = 'Could not sign in with Google.';
       showMessage(error, 'Google Sign in');
     }

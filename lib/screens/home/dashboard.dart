@@ -1,4 +1,5 @@
 import 'package:barcode_widget/barcode_widget.dart';
+import 'package:digislip/screens/home/dashboard_items.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -60,35 +61,47 @@ class _DashboardState extends State<Dashboard> {
         ),
       ),
       body: Container(
-          padding: const EdgeInsets.only(
-              left: 5.0, right: 5.0, bottom: 5.0, top: 5.0),
-          alignment: Alignment.center,
-          child: Card(
-              elevation: 5.0,
-              color: Theme.of(context).primaryColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              margin: const EdgeInsets.all(12),
-              child: ListView(
-                  padding: const EdgeInsets.only(
-                      left: 15, right: 15, bottom: 20, top: 20),
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
-                      child: Container(
-                        padding: EdgeInsets.all(15),
-                        color: Theme.of(context).cardColor,
-                        height: 200,
-                        child: BarcodeWidget(
-                          backgroundColor: Theme.of(context).cardColor,
-                          barcode: Barcode.code128(),
-                          data: user!.uid,
-                          drawText: false,
-                        ),
-                      ),
+        padding: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 5.0, top: 5.0),
+        alignment: Alignment.center,
+        child: Card(
+          elevation: 5.0,
+          color: Theme.of(context).primaryColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          margin: const EdgeInsets.all(12),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Container(
+                    padding: EdgeInsets.all(15),
+                    color: Theme.of(context).cardColor,
+                    height: 200,
+                    child: BarcodeWidget(
+                      backgroundColor: Theme.of(context).cardColor,
+                      barcode: Barcode.code128(),
+                      data: user!.uid,
+                      drawText: false,
                     ),
-                  ]))),
+                  ),
+                ),
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: DashboardItems(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

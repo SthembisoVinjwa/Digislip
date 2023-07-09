@@ -91,19 +91,22 @@ class _MenuState extends State<Menu> {
                       GestureDetector(
                         onTap: () {
                           print(item.title);
-
                           if (item.title == 'Account') {
                             widget.toPage(3);
+                          } else if (item.title == 'About') {
+                            widget.toPage(9);
                           }
                         },
                         child: Container(
-                          height: 70, // Adjust the height of the cards as needed
+                          height: 70,
+                          // Adjust the height of the cards as needed
                           padding: const EdgeInsets.only(bottom: 10),
                           child: Card(
                             child: Row(
                               children: [
                                 SizedBox(width: 10),
-                                Icon(item.Icon, color: Theme.of(context).primaryColor),
+                                Icon(item.Icon,
+                                    color: Theme.of(context).primaryColor),
                                 SizedBox(width: 10),
                                 Text(item.title,
                                     style: TextStyle(
@@ -138,6 +141,16 @@ class _MenuState extends State<Menu> {
                       widget.toPage(1);
                     } else if (item.title == 'Subscription') {
                       widget.toPage(2);
+                    } else if (item.title == 'Receipts') {
+                      widget.toPage(4);
+                    }else if (item.title == 'Upload') {
+                      widget.toPage(5);
+                    } else if (item.title == 'Codes') {
+                      widget.toPage(6);
+                    } else if (item.title == 'Vouchers') {
+                      widget.toPage(7);
+                    } else if (item.title == 'Terms and Conditions') {
+                      widget.toPage(8);
                     }
                   },
                   child: Container(
@@ -147,7 +160,8 @@ class _MenuState extends State<Menu> {
                       child: Row(
                         children: [
                           const SizedBox(width: 10),
-                          Icon(item.Icon, color: Theme.of(context).primaryColor),
+                          Icon(item.Icon,
+                              color: Theme.of(context).primaryColor),
                           const SizedBox(width: 10),
                           Text(
                             item.title,

@@ -8,7 +8,8 @@ import '../../../models/user.dart';
 import '../../../services/auth.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({Key? key}) : super(key: key);
+  final Function toPage;
+  const Dashboard({Key? key, required this.toPage}) : super(key: key);
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -93,7 +94,7 @@ class _DashboardState extends State<Dashboard> {
                     padding: const EdgeInsets.only(top: 20),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
-                      child: DashboardItems(),
+                      child: DashboardItems(toPage: widget.toPage,),
                     ),
                   ),
                 ),

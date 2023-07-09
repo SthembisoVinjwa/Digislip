@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import '../../../../../services/auth.dart';
 
-class Codes extends StatefulWidget {
-  const Codes({Key? key}) : super(key: key);
+class TermsAndConditions extends StatefulWidget {
+  const TermsAndConditions({Key? key}) : super(key: key);
 
   @override
-  State<Codes> createState() => _CodesState();
+  State<TermsAndConditions> createState() => _TermsAndConditionsState();
 }
 
-class _CodesState extends State<Codes> {
+class _TermsAndConditionsState extends State<TermsAndConditions> {
   final AuthService _auth = AuthService();
 
   @override

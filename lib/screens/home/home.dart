@@ -1,10 +1,16 @@
 import 'package:digislip/screens/home/dashboard/dashboard.dart';
+import 'package:digislip/screens/home/dashboard/items/reciepts/receipts.dart';
 import 'package:digislip/screens/home/menu/menu.dart';
+import 'package:digislip/screens/home/menu/terms_and_conditions.dart';
 import 'package:digislip/screens/home/subscription/subscription.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../services/auth.dart';
 import 'account/account.dart';
+import 'dashboard/items/codes/codes.dart';
+import 'dashboard/items/upload/upload.dart';
+import 'dashboard/items/vouchers/vouchers.dart';
+import 'menu/about.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -16,11 +22,17 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final AuthService _auth = AuthService();
   int navIndex = 1;
+  int pageIndex = 1;
   late List<Widget> screens;
 
   void toPage(int val) {
     setState(() {
-      navIndex = val;
+      if (val <= 3) {
+        navIndex = val;
+        pageIndex = navIndex;
+      } else {
+        pageIndex = val;
+      }
     });
   }
 
@@ -30,9 +42,15 @@ class _HomeState extends State<Home> {
     // Initialize the screens for navigation bar
     screens = <Widget>[
       Menu(toPage: toPage),
-      const Dashboard(),
+      Dashboard(toPage: toPage),
       const Subscription(),
       const Account(),
+      const Receipts(),
+      const Upload(),
+      const Codes(),
+      const Vouchers(),
+      const TermsAndConditions(),
+      const About(),
     ];
   }
 
@@ -72,7 +90,7 @@ class _HomeState extends State<Home> {
               height: 60,
               selectedIndex: navIndex,
               onDestinationSelected: (index) =>
-                  setState(() => navIndex = index),
+                  toPage(index),
               destinations: const [
                 NavigationDestination(
                   icon: Icon(Icons.menu_rounded, size: 28, color: Colors.white),
@@ -95,7 +113,7 @@ class _HomeState extends State<Home> {
           ),
         ),
       ),
-      body: screens[navIndex],
+      body: screens[pageIndex],
     );
   }
 }

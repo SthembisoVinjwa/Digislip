@@ -2,7 +2,8 @@ import 'package:delayed_display/delayed_display.dart';
 import 'package:flutter/material.dart';
 
 class DashboardItems extends StatefulWidget {
-  const DashboardItems({Key? key}) : super(key: key);
+  final Function toPage;
+  const DashboardItems({Key? key, required this.toPage}) : super(key: key);
 
   @override
   State<DashboardItems> createState() => _DashboardItemsState();
@@ -11,7 +12,7 @@ class DashboardItems extends StatefulWidget {
 class _DashboardItemsState extends State<DashboardItems> {
   List<ItemModel> items = [
     ItemModel(
-        "Reciepts",
+        "Receipts",
         Icons.receipt_long_rounded),
     ItemModel("Upload",
         Icons.cloud_upload_rounded),
@@ -64,7 +65,16 @@ class _DashboardItemsState extends State<DashboardItems> {
   Widget _DashboardOptionCard(ItemModel item) {
     return GestureDetector(
       onTap: () {
-        print(true);
+        print(item.title);
+        if (item.title == 'Receipts') {
+          widget.toPage(4);
+        } else if (item.title == 'Upload') {
+          widget.toPage(5);
+        } else if (item.title == 'Codes') {
+          widget.toPage(6);
+        } else if (item.title == 'Vouchers') {
+          widget.toPage(7);
+        }
       },
       child: TweenAnimationBuilder<double>(
         duration: const Duration(milliseconds: 760),

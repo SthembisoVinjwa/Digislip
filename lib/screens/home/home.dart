@@ -16,14 +16,25 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final AuthService _auth = AuthService();
   int navIndex = 1;
+  late List<Widget> screens;
 
-  // Screens for navigation bar
-  final screens = <Widget>[
-    const Menu(),
-    const Dashboard(),
-    const Subscription(),
-    const Account(),
-  ];
+  void toPage(int val) {
+    setState(() {
+      navIndex = val;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the screens for navigation bar
+    screens = <Widget>[
+      Menu(toPage: toPage),
+      const Dashboard(),
+      const Subscription(),
+      const Account(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {

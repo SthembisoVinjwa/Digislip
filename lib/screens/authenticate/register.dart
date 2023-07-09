@@ -74,13 +74,17 @@ class _RegisterState extends State<Register> with WidgetsBindingObserver {
 
     try {
       dynamic result = await _auth.RegisterEmailAndPassword(email, password);
-      Navigator.of(context).pop();
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
       if (result == null) {
         error = 'Could not create account. Enter a valid email.';
         showMessage(error, 'Not valid');
       }
     } catch (e) {
-      Navigator.of(context).pop();
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
       error = 'Could not create account. Enter a valid email.';
       showMessage(error, 'Not valid');
     }

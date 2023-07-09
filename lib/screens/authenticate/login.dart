@@ -75,14 +75,18 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
 
     try {
       dynamic result = await _auth.SignInEmailAndPassword(email, password);
-      Navigator.of(context).pop();
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
       if (result == null) {
         error = 'User does not exist.';
         showMessage(error, 'Not found');
       }
     } catch (e) {
       print(e);
-      Navigator.of(context).pop();
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
       error = 'User does not exist.';
       showMessage(error, 'Not found');
     }

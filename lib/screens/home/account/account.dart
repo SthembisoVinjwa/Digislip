@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../services/auth.dart';
 
 class Account extends StatefulWidget {
@@ -25,7 +24,7 @@ class _AccountState extends State<Account> {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: const [
                 Icon(Icons.receipt_long, size: 28),
                 SizedBox(width: 2),
                 Text(

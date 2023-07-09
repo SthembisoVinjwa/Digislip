@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-
 import '../../../services/auth.dart';
 
 class Menu extends StatefulWidget {
-  const Menu({Key? key}) : super(key: key);
+  final Function toPage;
+
+  const Menu({Key? key, required this.toPage}) : super(key: key);
 
   @override
   State<Menu> createState() => _MenuState();
@@ -11,6 +12,17 @@ class Menu extends StatefulWidget {
 
 class _MenuState extends State<Menu> {
   final AuthService _auth = AuthService();
+
+  List<ItemModel> items = [
+    ItemModel("Dashboard", Icons.home_rounded),
+    ItemModel("Receipts", Icons.receipt_long_rounded),
+    ItemModel("Upload", Icons.cloud_upload_rounded),
+    ItemModel("Subscription", Icons.local_offer_rounded),
+    ItemModel("Account", Icons.person_2_rounded),
+    ItemModel("Terms and Conditions", Icons.description_rounded),
+    ItemModel("About", Icons.info_rounded),
+    ItemModel("Sign Out", Icons.logout_rounded),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +66,8 @@ class _MenuState extends State<Menu> {
         ),
       ),
       body: Container(
-        padding: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 5.0, top: 5.0),
+        padding:
+            const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 5.0, top: 5.0),
         alignment: Alignment.center,
         child: Card(
           elevation: 5.0,
@@ -63,16 +76,103 @@ class _MenuState extends State<Menu> {
             borderRadius: BorderRadius.circular(8.0),
           ),
           margin: const EdgeInsets.all(12),
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              children: [
-                Container()
-              ],
+          child: Container(
+            padding:
+                const EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 5),
+            child: ListView.builder(
+              itemCount: items.length,
+              itemBuilder: (context, index) {
+                var item = items.elementAt(index);
+                bool separate =
+                    item.title == 'Account' || item.title == 'About';
+                if (separate) {
+                  return Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          print(item.title);
+
+                          if (item.title == 'Account') {
+                            widget.toPage(3);
+                          }
+                        },
+                        child: Container(
+                          height: 70, // Adjust the height of the cards as needed
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Card(
+                            child: Row(
+                              children: [
+                                SizedBox(width: 10),
+                                Icon(item.Icon, color: Theme.of(context).primaryColor),
+                                SizedBox(width: 10),
+                                Text(item.title,
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Theme.of(context).primaryColor)),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        height: 5,
+                        child: const Divider(
+                          color: Colors.white,
+                          thickness: 2,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 8,
+                      )
+                    ],
+                  );
+                }
+
+                return GestureDetector(
+                  onTap: () async {
+                    if (item.title == 'Sign Out') {
+                      await _auth.signOut();
+                    } else if (item.title == 'Dashboard') {
+                      widget.toPage(1);
+                    } else if (item.title == 'Subscription') {
+                      widget.toPage(2);
+                    }
+                  },
+                  child: Container(
+                    height: 70, // Adjust the height of the cards as needed
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Card(
+                      child: Row(
+                        children: [
+                          const SizedBox(width: 10),
+                          Icon(item.Icon, color: Theme.of(context).primaryColor),
+                          const SizedBox(width: 10),
+                          Text(
+                            item.title,
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).primaryColor),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
           ),
         ),
       ),
     );
   }
+}
+
+class ItemModel {
+  final String title;
+  final Icon;
+
+  ItemModel(this.title, this.Icon);
 }

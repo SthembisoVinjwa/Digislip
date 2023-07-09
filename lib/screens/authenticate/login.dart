@@ -127,6 +127,13 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
   }
 
   @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final user = Provider.of<CustomUser?>(context);
 
@@ -134,7 +141,7 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Theme.of(context).canvasColor,
         centerTitle: true,
         title: Stack(
           alignment: Alignment.center,
@@ -142,6 +149,7 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                SizedBox(width: 20),
                 Icon(Icons.receipt_long, size: 28),
                 SizedBox(width: 2),
                 Text(
@@ -150,7 +158,7 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                 ),
               ],
             ),
-            Positioned(
+            /*Positioned(
               right: -10,
               child: Row(
                 children: [
@@ -165,7 +173,7 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                   ),
                 ],
               ),
-            ),
+            ),*/
           ],
         ),
       ),
@@ -303,7 +311,7 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
-                                        color: Theme.of(context).canvasColor),
+                                        color: Theme.of(context).secondaryHeaderColor),
                                   ))),
                         ),
                         Padding(
@@ -514,7 +522,7 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                                               fontWeight: FontWeight.bold,
                                               fontSize: 16,
                                               color: Theme.of(context)
-                                                  .canvasColor),
+                                                  .secondaryHeaderColor),
                                         ))
                                   ],
                                 ),

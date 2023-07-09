@@ -63,6 +63,9 @@ class _DashboardItemsState extends State<DashboardItems> {
 
   Widget _DashboardOptionCard(ItemModel item) {
     return GestureDetector(
+      onTap: () {
+        print(true);
+      },
       child: TweenAnimationBuilder<double>(
         duration: const Duration(milliseconds: 760),
         tween: Tween(begin: -1, end: 0.5),

@@ -93,32 +93,40 @@ class _RegisterState extends State<Register> with WidgetsBindingObserver {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Theme.of(context).canvasColor,
-        title: Row(
-          children: const [
-            Icon(
-              Icons.receipt_long,
-              size: 28,
+        centerTitle: true,
+        title: Stack(
+          alignment: Alignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(width: 20),
+                Icon(Icons.receipt_long, size: 28),
+                SizedBox(width: 2),
+                Text(
+                  'DigiSlips',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
             ),
-            SizedBox(
-              width: 2,
-            ),
-            Text(
-              'DigiSlips',
-              style: TextStyle(fontSize: 16),
-            )
+            /*Positioned(
+              right: -10,
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(
+                      Icons.exit_to_app_rounded,
+                      size: 28,
+                    ),
+                    onPressed: () {
+                      SystemNavigator.pop();
+                    },
+                  ),
+                ],
+              ),
+            ),*/
           ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.exit_to_app,
-              size: 28,
-            ),
-            onPressed: () {
-              SystemNavigator.pop();
-            },
-          ),
-        ],
       ),
       body: SafeArea(
         child: Column(
@@ -331,7 +339,7 @@ class _RegisterState extends State<Register> with WidgetsBindingObserver {
                                               fontWeight: FontWeight.bold,
                                               fontSize: 16,
                                               color: Theme.of(context)
-                                                  .canvasColor),
+                                                  .secondaryHeaderColor),
                                         ))
                                   ],
                                 ),

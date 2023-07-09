@@ -1,10 +1,10 @@
-import 'package:digislip/screens/home/dashboard.dart';
-import 'package:digislip/screens/home/menu.dart';
-import 'package:digislip/screens/home/profile.dart';
-import 'package:digislip/screens/home/subscription.dart';
+import 'package:digislip/screens/home/dashboard/dashboard.dart';
+import 'package:digislip/screens/home/menu/menu.dart';
+import 'package:digislip/screens/home/subscription/subscription.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../services/auth.dart';
+import 'account/account.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -22,7 +22,7 @@ class _HomeState extends State<Home> {
     const Menu(),
     const Dashboard(),
     const Subscription(),
-    const Profile()
+    const Account(),
   ];
 
   @override
@@ -47,7 +47,7 @@ class _HomeState extends State<Home> {
               indicatorColor:
               Theme.of(context).colorScheme.secondary,
               labelTextStyle: MaterialStateProperty.all(
-                TextStyle(
+                const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
@@ -77,7 +77,7 @@ class _HomeState extends State<Home> {
                 ),
                 NavigationDestination(
                   icon: Icon(Icons.person_2_rounded, size: 28, color: Colors.white),
-                  label: 'Profile',
+                  label: 'Account',
                 ),
               ],
             ),

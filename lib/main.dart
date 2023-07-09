@@ -25,7 +25,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           brightness: Brightness.light,
           primaryColor: const Color(0xFF234F1E),
-          canvasColor: const Color(0xFF028A0F),
+          secondaryHeaderColor: const Color(0xFF028A0F),
+          canvasColor: const Color(0xFF234F1E),
           cardColor: Colors.white,
           colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.green)
               .copyWith(secondary: const Color(0xFF5DBB63)),

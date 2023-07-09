@@ -1,26 +1,19 @@
-import 'package:barcode_widget/barcode_widget.dart';
-import 'package:digislip/screens/home/dashboard_items.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 
-import '../../models/user.dart';
-import '../../services/auth.dart';
+import '../../../services/auth.dart';
 
-class Dashboard extends StatefulWidget {
-  const Dashboard({Key? key}) : super(key: key);
+class Subscription extends StatefulWidget {
+  const Subscription({Key? key}) : super(key: key);
 
   @override
-  State<Dashboard> createState() => _DashboardState();
+  State<Subscription> createState() => _SubscriptionState();
 }
 
-class _DashboardState extends State<Dashboard> {
+class _SubscriptionState extends State<Subscription> {
   final AuthService _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<CustomUser?>(context);
-
     return Scaffold(
       backgroundColor: Theme.of(context).cardColor,
       appBar: AppBar(
@@ -74,29 +67,7 @@ class _DashboardState extends State<Dashboard> {
             padding: const EdgeInsets.all(20.0),
             child: Column(
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: Container(
-                    padding: EdgeInsets.all(15),
-                    color: Theme.of(context).cardColor,
-                    height: 200,
-                    child: BarcodeWidget(
-                      backgroundColor: Theme.of(context).cardColor,
-                      barcode: Barcode.code128(),
-                      data: user!.uid,
-                      drawText: false,
-                    ),
-                  ),
-                ),
-                Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
-                      child: DashboardItems(),
-                    ),
-                  ),
-                ),
+                Container()
               ],
             ),
           ),

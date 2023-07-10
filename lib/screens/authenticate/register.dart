@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../../components/button.dart';
 import '../../services/auth.dart';
+import '../home/home.dart';
 
 class Register extends StatefulWidget {
   final Function toggleView;
@@ -75,7 +76,11 @@ class _RegisterState extends State<Register> with WidgetsBindingObserver {
     try {
       dynamic result = await _auth.RegisterEmailAndPassword(email, password);
       if (mounted) {
-        Navigator.of(context).pop();
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => Home(), // Replace with your desired screen
+          ),
+        );
       }
       if (result == null) {
         error = 'Could not create account. Enter a valid email.';

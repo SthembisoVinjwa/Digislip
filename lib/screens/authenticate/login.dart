@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:digislip/screens/authenticate/reset.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -309,7 +310,13 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                           child: Padding(
                               padding: const EdgeInsets.only(right: 10),
                               child: TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                            const Reset()));
+                                  },
                                   child: Text(
                                     'Forgot Password?',
                                     style: TextStyle(

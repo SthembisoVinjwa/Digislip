@@ -25,8 +25,6 @@ class DatabaseService {
     }
   }
 
-  // Create reciept lines
-
   // Create voucher
   Future<void> createVoucherData() async {
     final DocumentReference userDoc = usersCollection.doc(uid);

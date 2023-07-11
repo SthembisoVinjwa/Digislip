@@ -70,10 +70,6 @@ class _RegisterState extends State<Register> with WidgetsBindingObserver {
           error = 'Could not create account. Enter a valid email.';
           showMessage(error, 'Not valid');
         });
-      } else {
-        await DatabaseService(uid: result.user.uid, email: result.user.email).createUserData();
-        await DatabaseService(uid: result.user.uid, email: result.user.email).createReceiptData();
-        await DatabaseService(uid: result.user.uid, email: result.user.email).createVoucherData();
       }
     } catch (e) {
       print(e);

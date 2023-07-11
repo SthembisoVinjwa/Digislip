@@ -173,6 +173,7 @@ class _ResetState extends State<Reset> {
                             },
                             color: Theme.of(context).canvasColor,
                             title: 'Send email',
+                            margin: 15.0,
                           ),
                         ),
                         if (error.isNotEmpty)

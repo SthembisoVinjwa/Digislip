@@ -1,5 +1,7 @@
+import 'package:digislip/components/button.dart';
 import 'package:flutter/material.dart';
 import '../../../../../services/auth.dart';
+import 'package:intl/intl.dart';
 
 class Upload extends StatefulWidget {
   final Function toPage;
@@ -12,7 +14,9 @@ class Upload extends StatefulWidget {
 
 class _UploadState extends State<Upload> {
   final AuthService _auth = AuthService();
-  String _dropdownValue = 'Merchant 1';
+  String _dropdownValue = '';
+  final dateController = TextEditingController();
+  String title = '';
   List<DropdownMenuItem<String>> merchants = const [
     DropdownMenuItem(
       value: 'Merchant 1',
@@ -27,6 +31,7 @@ class _UploadState extends State<Upload> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).cardColor,
       appBar: AppBar(
         elevation: 0,
@@ -138,11 +143,19 @@ class _UploadState extends State<Upload> {
                                   items: merchants,
                                   iconEnabledColor: Theme.of(context).cardColor,
                                   style: TextStyle(
+                                    color: Theme.of(context).cardColor,
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  value: _dropdownValue.isEmpty
+                                      ? null
+                                      : _dropdownValue,
+                                  hint: Text(
+                                    'Select Merchant',
+                                    style: TextStyle(
                                       color: Theme.of(context).cardColor,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold),
-                                  value: _dropdownValue,
-                                  hint: const Text('Select Merchant'),
+                                    ),
+                                  ),
                                   onChanged: (String? value) {
                                     if (value is String) {
                                       setState(() {
@@ -151,12 +164,69 @@ class _UploadState extends State<Upload> {
                                     }
                                   },
                                 ),
+                                const SizedBox(
+                                  height: 14,
+                                ),
+                                TextFormField(
+                                  decoration: InputDecoration(
+                                    hintText: 'Date: dd-mm-yyyy',
+                                    fillColor: Theme.of(context).cardColor,
+                                    filled: true,
+                                  ),
+                                  controller: dateController,
+                                  onTap: () async {
+                                    DateTime? selectedDate =
+                                        await showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime.utc(2010, 10, 16),
+                                      lastDate: DateTime.utc(2090, 10, 16),
+                                      builder: (BuildContext context,
+                                          Widget? child) {
+                                        return Theme(
+                                          data: ThemeData.light().copyWith(
+                                            colorScheme:
+                                                ColorScheme.light().copyWith(
+                                              primary: Theme.of(context)
+                                                  .primaryColor, // Set primary color to green
+                                            ), // Set background color to white
+                                          ),
+                                          child: child ?? const SizedBox(),
+                                        );
+                                      },
+                                    );
+                                    if (selectedDate != null) {
+                                      setState(() {
+                                        dateController.text =
+                                            DateFormat('dd-MM-yyyy')
+                                                .format(selectedDate);
+                                      });
+                                    }
+                                  },
+                                )
                               ],
                             ),
                           ),
                         ),
                       ),
-                      Container()
+                      MainButton(
+                        onTap: () {},
+                        color: Theme.of(context).primaryColor,
+                        title: 'Select Receipt',
+                        margin: 20.0,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20.0, bottom: 15.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Container(
+                            color: Colors.red,
+                            height: 180,
+                            width: 130,
+                          ),
+                        ),
+                      ),
+                      Text('My picture.png')
                     ],
                   ),
                 ),

@@ -307,6 +307,7 @@ class _RegisterState extends State<Register> with WidgetsBindingObserver {
                             },
                             color: Theme.of(context).canvasColor,
                             title: 'Register',
+                            margin: 15.0,
                           ),
                         ),
                         Expanded(child: Container()),

@@ -1,13 +1,12 @@
 import 'dart:io';
-
+import 'package:digislip/screens/authenticate/loading.dart';
 import 'package:digislip/screens/authenticate/reset.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
 import '../../components/button.dart';
 import '../../models/user.dart';
 import '../../services/auth.dart';
+import '../../services/database.dart';
 
 class Login extends StatefulWidget {
   final Function toggleView;
@@ -28,6 +27,7 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
   bool _emailError = false;
   bool _passwordError = false;
   final bool _isIphone = Platform.isIOS;
+  bool loading = false;
 
   void showMessage(String message, String title) {
     AlertDialog inputFail = AlertDialog(
@@ -60,89 +60,64 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
   }
 
   Future<void> signInWithEmail(String email, String password) async {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return Material(
-            type: MaterialType.transparency,
-            child: Container(
-                alignment: Alignment.center,
-                child: CircularProgressIndicator(
-                  strokeWidth: 5.0,
-                  color: Theme.of(context).primaryColor,
-                )),
-          );
-        });
-
     try {
+      setState(() {
+        loading = true;
+      });
       dynamic result = await _auth.SignInEmailAndPassword(email, password);
-      if (mounted) {
-        Navigator.of(context).pop();
-      }
       if (result == null) {
-        error = 'User does not exist.';
-        showMessage(error, 'Not found');
+        setState(() {
+          loading = false;
+          error = 'User does not exist.';
+          showMessage(error, 'Not found');
+        });
+      } else {
+        await DatabaseService(uid: result.user.uid, email: result.user.email).createUserData();
+        await DatabaseService(uid: result.user.uid, email: result.user.email).createReceiptData();
+        await DatabaseService(uid: result.user.uid, email: result.user.email).createVoucherData();
       }
     } catch (e) {
       print(e);
-      if (mounted) {
-        Navigator.of(context).pop();
-      }
-      error = 'User does not exist.';
-      showMessage(error, 'Not found');
+      setState(() {
+        loading = false;
+        error = 'User does not exist.';
+        showMessage(error, 'Not found');
+      });
     }
   }
 
   Future<void> signInWithGoogle() async {
-    if (mounted) {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return Material(
-              type: MaterialType.transparency,
-              child: Container(
-                  alignment: Alignment.center,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 5.0,
-                    color: Theme
-                        .of(context)
-                        .primaryColor,
-                  )),
-            );
-          });
-    }
-
     try {
+      setState(() {
+        loading = true;
+      });
       dynamic result = await _auth.signInWithGoogle();
-      if (mounted) {
-        Navigator.of(context).pop();
-      }
       if (result == null) {
-        error = 'Could not sign in with Google.';
-        showMessage(error, 'Google Sign in');
+        setState(() {
+          loading = false;
+          error = 'Could not sign in with Google.';
+          showMessage(error, 'Google Sign in');
+        });
+      } else {
+        await DatabaseService(uid: result.user.uid, email: result.user.email).createUserData();
+        await DatabaseService(uid: result.user.uid, email: result.user.email).createReceiptData();
+        await DatabaseService(uid: result.user.uid, email: result.user.email).createVoucherData();
       }
     } catch (e) {
       print(e);
-      if (mounted) {
-        Navigator.of(context).pop();
-      }
-      error = 'Could not sign in with Google.';
-      showMessage(error, 'Google Sign in');
+      setState(() {
+        loading = true;
+        error = 'Could not sign in with Google.';
+        showMessage(error, 'Google Sign in');
+      });
     }
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<CustomUser?>(context);
 
-    return Scaffold(
+    return loading? const Loading() : Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0,
@@ -153,7 +128,7 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: const [
                 SizedBox(width: 20),
                 Icon(Icons.receipt_long, size: 28),
                 SizedBox(width: 2),

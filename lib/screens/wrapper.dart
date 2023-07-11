@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/user.dart';
+import '../models/user_data.dart';
+import '../services/database.dart';
 import 'authenticate/authenticate.dart';
 import 'home/home.dart';
 
@@ -14,7 +16,11 @@ class Wrapper extends StatelessWidget {
     if (user == null) {
       return const Authenticate();
     } else {
-      return const Home();
+      return StreamProvider<UserData?>.value(
+          value: DatabaseService(uid: user!.uid, email: user.email!).userData,
+          initialData: null,
+          child: const Home(),
+      );
     }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:digislip/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../models/user.dart';
@@ -7,7 +8,7 @@ class AuthService {
 
   // create custom user object based on Firebase user
   CustomUser? _userFromFirebaseUser(User? user) {
-    return user != null ? CustomUser(uid: user.uid) : null;
+    return user != null ? CustomUser(uid: user.uid, email: user.email) : null;
   }
 
   // auth change user stream

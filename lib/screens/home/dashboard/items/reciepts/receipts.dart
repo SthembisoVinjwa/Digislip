@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../../../../models/user_data.dart';
 import '../../../../../services/auth.dart';
 
 class Receipts extends StatefulWidget {
@@ -13,6 +15,13 @@ class _ReceiptsState extends State<Receipts> {
 
   @override
   Widget build(BuildContext context) {
+    final info = Provider.of<UserData?>(context);
+
+    if (info != null) {
+      print(info!.email);
+      print(info.uid);
+    }
+
     return Scaffold(
       backgroundColor: Theme.of(context).cardColor,
       appBar: AppBar(

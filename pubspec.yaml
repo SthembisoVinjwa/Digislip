@@ -45,6 +45,7 @@ dependencies:
   image_picker: ^1.0.0
   barcode_widget: ^2.0.4
   delayed_display: ^2.0.0
+  flutter_spinkit: ^5.2.0
 
 dev_dependencies:
   flutter_test:

@@ -5,6 +5,7 @@ import 'package:digislip/screens/home/menu/terms_and_conditions.dart';
 import 'package:digislip/screens/home/subscription/subscription.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../models/user_data.dart';
 import '../../services/auth.dart';
 import 'account/account.dart';
 import 'dashboard/items/codes/codes.dart';

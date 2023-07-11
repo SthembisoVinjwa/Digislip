@@ -59,14 +59,16 @@ class _ResetState extends State<Reset> {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(width: 20),
+              children: const [
+
                 Icon(Icons.receipt_long, size: 28),
                 SizedBox(width: 2),
                 Text(
                   'DigiSlips',
                   style: TextStyle(fontSize: 16),
                 ),
+                SizedBox(width: 20),
+                SizedBox(width: 20),
               ],
             ),
             /*Positioned(

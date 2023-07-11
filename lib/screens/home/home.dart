@@ -47,7 +47,7 @@ class _HomeState extends State<Home> {
       const Subscription(),
       const Account(),
       const Receipts(),
-      const Upload(),
+      Upload(toPage: toPage),
       const Codes(),
       const Vouchers(),
       const TermsAndConditions(),

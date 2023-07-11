@@ -184,6 +184,17 @@ class _ResetState extends State<Reset> {
                                 style: TextStyle(
                                     fontSize: 12, color: Colors.red[800]),
                               )),
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            alignment: Alignment.bottomCenter,
+                            child: Text(
+                              '2023 - Copyright - DigiSlips',
+                              style: TextStyle(
+                                  color: Colors.grey, fontSize: 16),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),

@@ -1,7 +1,18 @@
+import 'dart:typed_data';
+
 import 'package:digislip/components/button.dart';
+import 'package:digislip/components/utils.dart';
+import 'package:digislip/models/user.dart';
+import 'package:digislip/services/auth.dart';
+import 'package:digislip/services/database.dart';
 import 'package:flutter/material.dart';
-import '../../../../../services/auth.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:textwrap/textwrap.dart';
 import 'package:intl/intl.dart';
+
+import '../../../../authenticate/loading.dart';
 
 class Upload extends StatefulWidget {
   final Function toPage;
@@ -17,19 +28,79 @@ class _UploadState extends State<Upload> {
   String _dropdownValue = '';
   final dateController = TextEditingController();
   String title = '';
-  List<DropdownMenuItem<String>> merchants = const [
-    DropdownMenuItem(
-      value: 'Merchant 1',
-      child: Text('Merchant 1'),
-    ),
-    DropdownMenuItem(
-      value: 'Merchant 2',
-      child: Text('Merchant 2'),
-    ),
-  ];
+  Uint8List? _image;
+  String filename = '';
+  final _formKey = GlobalKey<FormState>();
+  List<Map<String, String>> merchantsData = [];
+  List<DropdownMenuItem<String>> merchants = [];
+
+  void populateMerchants() async {
+    String? uid = Provider.of<CustomUser?>(context, listen: false)!.uid;
+    String? email = Provider.of<CustomUser?>(context, listen: false)!.email;
+
+    merchantsData =
+        await DatabaseService(uid: uid, email: email!).getMerchants();
+
+    setState(() {
+      merchants = merchantsData.map((merchant) {
+        String name = merchant['name']!;
+        return DropdownMenuItem(
+          value: name,
+          child: Text(name),
+        );
+      }).toList();
+    });
+  }
+
+  Future<void> selectImage() async {
+    Map<String, dynamic> map = await pickImage(ImageSource.gallery);
+    setState(() {
+      filename = map['filename'];
+      title = 'Filename: ${map['filename'].toString().split('/').last}';
+      _image = map['image'];
+    });
+  }
+
+  void showMessage(String message, String title) {
+    AlertDialog inputFail = AlertDialog(
+      backgroundColor: Colors.white,
+      title: Text(
+        title,
+        style: const TextStyle(color: Colors.black),
+      ),
+      content: Text(message, style: const TextStyle(color: Colors.black)),
+      actions: [
+        ElevatedButton(
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(
+                    Theme.of(context).canvasColor)),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              'Ok',
+              style: TextStyle(color: Colors.white),
+            )),
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return inputFail;
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    populateMerchants();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<CustomUser?>(context);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).cardColor,
@@ -169,7 +240,7 @@ class _UploadState extends State<Upload> {
                                 ),
                                 TextFormField(
                                   decoration: InputDecoration(
-                                    hintText: 'Date: dd-mm-yyyy',
+                                    hintText: 'Date: dd/mm/yyyy',
                                     fillColor: Theme.of(context).cardColor,
                                     filled: true,
                                   ),
@@ -198,7 +269,7 @@ class _UploadState extends State<Upload> {
                                     if (selectedDate != null) {
                                       setState(() {
                                         dateController.text =
-                                            DateFormat('dd-MM-yyyy')
+                                            DateFormat('dd/MM/yyyy')
                                                 .format(selectedDate);
                                       });
                                     }
@@ -210,23 +281,105 @@ class _UploadState extends State<Upload> {
                         ),
                       ),
                       MainButton(
-                        onTap: () {},
-                        color: Theme.of(context).primaryColor,
+                        onTap: () async {
+                          await selectImage();
+                        },
+                        color: Theme.of(context).colorScheme.secondary,
                         title: 'Select Receipt',
                         margin: 20.0,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 20.0, bottom: 15.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: Container(
-                            color: Colors.red,
-                            height: 180,
-                            width: 130,
-                          ),
+                        padding: const EdgeInsets.only(bottom: 15.0, top: 15.0),
+                        child: Text(
+                          fill(title, width: 20),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Theme.of(context).primaryColor),
                         ),
                       ),
-                      Text('My picture.png')
+                      Expanded(child: Container()),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20.0),
+                        child: MainButton(
+                          onTap: () async {
+                            List<String> errors = [];
+
+                            if (_dropdownValue.isEmpty) {
+                              errors.add('- Please select a merchant.');
+                            }
+
+                            if (dateController.text.isEmpty ||
+                                !RegExp(r'^\d{2}/\d{2}/\d{4}$')
+                                    .hasMatch(dateController.text)) {
+                              errors.add(
+                                  '- Add/Select date with the format: dd-mm-yyyy.');
+                            }
+
+                            if (filename.isEmpty) {
+                              errors.add(
+                                  '- Please select an image of your receipt.');
+                            }
+
+                            if (errors.isNotEmpty) {
+                              showMessage(errors.join('\n\n'),
+                                  "Missing/Incorrect fields");
+                            } else {
+                              try {
+                                showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Loading(), // Loading indicator widget
+                                          SizedBox(height: 30),
+                                          Text('Uploading Receipt...'), // Optional text to display
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+                                dynamic pic = _image == null
+                                    ? ''
+                                    : await DatabaseService(
+                                            uid: user!.uid, email: user.email!)
+                                        .uploadReceiptPicture(
+                                            _image!, filename);
+                                String? merchantId = merchantsData.firstWhere(
+                                    (merchant) =>
+                                        merchant['name'] ==
+                                        _dropdownValue)['id'];
+                                await DatabaseService(
+                                        uid: user!.uid, email: user.email!)
+                                    .updateReceiptPicture(
+                                        'Users/$filename',
+                                        dateController.text,
+                                        merchantId!,
+                                        _dropdownValue,
+                                        'upload');
+                                if (mounted) {
+                                  Navigator.of(context).pop();
+                                }
+                                showMessage('Receipt was successfully uploaded.', 'Uploaded Receipt');
+                              } catch (e) {
+                                print(e);
+                                if (mounted) {
+                                  Navigator.of(context).pop();
+                                }
+                                showMessage(
+                                    'Something went wrong with the upload. Check your internet connection.',
+                                    'Could not upload');
+                              }
+                            }
+                          },
+                          color: Theme.of(context).primaryColor,
+                          title: 'Save',
+                          margin: 20.0,
+                        ),
+                      ),
                     ],
                   ),
                 ),

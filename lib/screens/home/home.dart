@@ -58,6 +58,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).cardColor,
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(left: 17.0, right: 17.0, bottom: 17.0),

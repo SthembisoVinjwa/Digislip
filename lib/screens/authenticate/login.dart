@@ -75,8 +75,6 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
         await DatabaseService(uid: result.user.uid, email: result.user.email)
             .createUserData();
         await DatabaseService(uid: result.user.uid, email: result.user.email)
-            .createReceiptData();
-        await DatabaseService(uid: result.user.uid, email: result.user.email)
             .createVoucherData();
       }
     } catch (e) {
@@ -104,8 +102,8 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
       } else {
         await DatabaseService(uid: result.user.uid, email: result.user.email)
             .createUserData();
-        await DatabaseService(uid: result.user.uid, email: result.user.email)
-            .createReceiptData();
+        //await DatabaseService(uid: result.user.uid, email: result.user.email)
+          //  .createReceiptData();
         await DatabaseService(uid: result.user.uid, email: result.user.email)
             .createVoucherData();
       }

@@ -47,6 +47,7 @@ dependencies:
   delayed_display: ^2.0.0
   flutter_spinkit: ^5.2.0
   intl:
+  textwrap: ^1.2.0
 
 dev_dependencies:
   flutter_test:

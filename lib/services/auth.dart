@@ -25,7 +25,6 @@ class AuthService {
           email: email, password: password);
       User? user = result.user;
       await DatabaseService(uid: user!.uid, email: user.email!).createUserData();
-
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());

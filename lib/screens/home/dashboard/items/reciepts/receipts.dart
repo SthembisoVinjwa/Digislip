@@ -1,6 +1,7 @@
 import 'package:digislip/models/user.dart';
 import 'package:digislip/models/user_data.dart';
 import 'package:digislip/screens/authenticate/loading.dart';
+import 'package:digislip/screens/home/dashboard/items/reciepts/receipt_card.dart';
 import 'package:digislip/services/auth.dart';
 import 'package:digislip/services/database.dart';
 import 'package:flutter/material.dart';
@@ -226,8 +227,84 @@ class _ReceiptsState extends State<Receipts> {
                                   ),
                                 )
                               : Expanded(
-                                  child: Container(
-                                    child: Text(selectedReceipt!['Data']!),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.only(
+                                            left: 15,
+                                            right: 15,
+                                            bottom: 10,
+                                            top: 15),
+                                        child: Card(
+                                          color: Theme.of(context).primaryColor,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                          child: ListTile(
+                                            title: Text(
+                                              selectedReceipt!['Storename'] ??
+                                                  '',
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .cardColor,
+                                                  fontSize: 16),
+                                            ),
+                                            subtitle: Text(
+                                              selectedReceipt!['Receiptdate'] ??
+                                                  '',
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .cardColor,
+                                                  fontSize: 12),
+                                            ),
+                                            trailing: IconButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    viewReceipt = false;
+                                                    selectedReceipt = {};
+                                                  });
+                                                },
+                                                icon: Icon(Icons.cancel_rounded,
+                                                    size: 30,
+                                                    color: Theme.of(context)
+                                                        .cardColor)),
+                                            // Customize the UI for each receipt item as needed
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        child: FutureBuilder<List<Map<String, String>>>(
+                                          future: DatabaseService(
+                                                  uid: user!.uid,
+                                                  email: user.email!)
+                                              .getLines(selectedReceipt!['Receiptid']!),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.hasData) {
+                                              return ReceiptCard(receiptLines: snapshot.data!, receipt: selectedReceipt!,);
+                                            } else if (snapshot.hasError) {
+                                              return Text(
+                                                  snapshot.error.toString());
+                                            } else {
+                                              return Expanded(
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: const [
+                                                    Loading(), // Loading indicator widget
+                                                    SizedBox(height: 30),
+                                                    Text('Loading Receipt...'),
+                                                    SizedBox(height: 60),
+                                                  ],
+                                                ),
+                                              );
+                                            }
+                                          },
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 )
                           : Expanded(

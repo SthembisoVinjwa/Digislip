@@ -73,6 +73,7 @@ class DatabaseService {
           'Source': _getFieldValue(doc, 'Source'),
           'Merchantid': _getFieldValue(doc, 'Merchantid'),
           'Storename': _getFieldValue(doc, 'Storename'),
+          'Receiptid': doc.id.toString(),
           'Type': _getFieldValue(doc, 'Type'),
         };
         return receiptData;
@@ -89,7 +90,26 @@ class DatabaseService {
     }
   }
 
-  // Get vouchers
+  // Get Receipt Lines
+  Future<List<Map<String, String>>> getLines(String receiptId) async {
+    final DocumentReference userDoc = usersCollection.doc(uid);
+    final CollectionReference receiptsCollection = userDoc.collection('Receipts');
+    final CollectionReference receiptLinesCollection = receiptsCollection.doc(receiptId).collection('Receiptlines');
+
+    final QuerySnapshot snapshot = await receiptLinesCollection.get();
+
+    return snapshot.docs.map((doc) {
+      final receiptLines = {
+        'Amount': _getFieldValue(doc, 'Amount'),
+        'Description': _getFieldValue(doc, 'Description'),
+        'Linenumber': _getFieldValue(doc, 'Linenumber'),
+        'Qty': _getFieldValue(doc, 'Qty'),
+      };
+      return receiptLines;
+    }).toList();
+  }
+
+  // Get Vouchers
   Stream<List<Map<String, String>>> getVouchers() {
     final DocumentReference userDoc = usersCollection.doc(uid);
     final CollectionReference vouchersCollection =

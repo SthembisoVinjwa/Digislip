@@ -23,6 +23,14 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+          textTheme: const TextTheme(
+            bodyLarge: TextStyle(
+              color: Color(0xFF234F1E),
+            ),
+            bodyMedium: TextStyle(
+              color: Color(0xFF234F1E),
+            ),
+          ),
           brightness: Brightness.light,
           primaryColor: const Color(0xFF234F1E),
           secondaryHeaderColor: const Color(0xFF028A0F),

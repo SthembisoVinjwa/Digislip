@@ -1,6 +1,6 @@
+import 'package:digislip/components/button.dart';
+import 'package:digislip/services/auth.dart';
 import 'package:flutter/material.dart';
-import '../../components/button.dart';
-import '../../services/auth.dart';
 
 class Reset extends StatefulWidget {
   const Reset({Key? key}) : super(key: key);
@@ -189,7 +189,7 @@ class _ResetState extends State<Reset> {
                           child: Container(
                             padding: const EdgeInsets.only(bottom: 10),
                             alignment: Alignment.bottomCenter,
-                            child: Text(
+                            child: const Text(
                               '2023 - Copyright - DigiSlips',
                               style: TextStyle(
                                   color: Colors.grey, fontSize: 16),

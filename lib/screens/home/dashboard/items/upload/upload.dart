@@ -1,18 +1,15 @@
 import 'dart:typed_data';
-
 import 'package:digislip/components/button.dart';
 import 'package:digislip/components/utils.dart';
 import 'package:digislip/models/user.dart';
+import 'package:digislip/screens/authenticate/loading.dart';
 import 'package:digislip/services/auth.dart';
 import 'package:digislip/services/database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:textwrap/textwrap.dart';
 import 'package:intl/intl.dart';
-
-import '../../../../authenticate/loading.dart';
 
 class Upload extends StatefulWidget {
   final Function toPage;
@@ -38,12 +35,17 @@ class _UploadState extends State<Upload> {
     String? uid = Provider.of<CustomUser?>(context, listen: false)!.uid;
     String? email = Provider.of<CustomUser?>(context, listen: false)!.email;
 
-    merchantsData =
-        await DatabaseService(uid: uid, email: email!).getMerchants();
+    merchantsData = await DatabaseService(uid: uid, email: email!).getMerchants();
+
+    merchantsData.sort((a, b) {
+      String nameA = a['Name']!.toLowerCase();
+      String nameB = b['Name']!.toLowerCase();
+      return nameA.compareTo(nameB);
+    });
 
     setState(() {
       merchants = merchantsData.map((merchant) {
-        String name = merchant['name']!;
+        String name = merchant['Name']!;
         return DropdownMenuItem(
           value: name,
           child: Text(name),
@@ -55,7 +57,7 @@ class _UploadState extends State<Upload> {
   Future<void> selectImage() async {
     Map<String, dynamic> map = await pickImage(ImageSource.gallery);
     setState(() {
-      filename = map['filename'];
+      filename = map['filename'].toString().split('/').first;
       title = 'Filename: ${map['filename'].toString().split('/').last}';
       _image = map['image'];
     });
@@ -257,7 +259,7 @@ class _UploadState extends State<Upload> {
                                         return Theme(
                                           data: ThemeData.light().copyWith(
                                             colorScheme:
-                                                ColorScheme.light().copyWith(
+                                                const ColorScheme.light().copyWith(
                                               primary: Theme.of(context)
                                                   .primaryColor, // Set primary color to green
                                             ), // Set background color to white
@@ -333,10 +335,10 @@ class _UploadState extends State<Upload> {
                                     return AlertDialog(
                                       content: Column(
                                         mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Loading(), // Loading indicator widget
+                                        children: const [
+                                          Loading(),
                                           SizedBox(height: 30),
-                                          Text('Uploading Receipt...'), // Optional text to display
+                                          Text('Uploading Receipt...'),
                                         ],
                                       ),
                                     );
@@ -350,16 +352,16 @@ class _UploadState extends State<Upload> {
                                             _image!, filename);
                                 String? merchantId = merchantsData.firstWhere(
                                     (merchant) =>
-                                        merchant['name'] ==
-                                        _dropdownValue)['id'];
+                                        merchant['Name'] ==
+                                        _dropdownValue)['Id'];
                                 await DatabaseService(
                                         uid: user!.uid, email: user.email!)
                                     .updateReceiptPicture(
-                                        'Users/$filename',
+                                        'Users/${user.uid}/$filename',
                                         dateController.text,
                                         merchantId!,
                                         _dropdownValue,
-                                        'upload');
+                                        'Upload');
                                 if (mounted) {
                                   Navigator.of(context).pop();
                                 }

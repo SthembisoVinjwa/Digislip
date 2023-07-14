@@ -38,6 +38,10 @@ class AuthService {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       User? user = result.user;
+      await DatabaseService(uid: user!.uid, email: user.email!)
+          .createUserData();
+      await DatabaseService(uid: user!.uid, email: user.email!)
+          .createVoucherData();
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());

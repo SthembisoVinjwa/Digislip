@@ -3,10 +3,8 @@ import 'package:digislip/screens/home/dashboard/items/reciepts/receipts.dart';
 import 'package:digislip/screens/home/menu/menu.dart';
 import 'package:digislip/screens/home/menu/terms_and_conditions.dart';
 import 'package:digislip/screens/home/subscription/subscription.dart';
+import 'package:digislip/services/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../models/user_data.dart';
-import '../../services/auth.dart';
 import 'account/account.dart';
 import 'dashboard/items/codes/codes.dart';
 import 'dashboard/items/upload/upload.dart';
@@ -46,7 +44,7 @@ class _HomeState extends State<Home> {
       Dashboard(toPage: toPage),
       const Subscription(),
       const Account(),
-      const Receipts(),
+      Receipts(toPage: toPage),
       Upload(toPage: toPage),
       const Codes(),
       const Vouchers(),

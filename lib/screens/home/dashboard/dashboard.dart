@@ -1,11 +1,9 @@
 import 'package:barcode_widget/barcode_widget.dart';
+import 'package:digislip/models/user.dart';
 import 'package:digislip/screens/home/dashboard/dashboard_items.dart';
+import 'package:digislip/services/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
-import '../../../models/user.dart';
-import '../../../services/auth.dart';
 
 class Dashboard extends StatefulWidget {
   final Function toPage;

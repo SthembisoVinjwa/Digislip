@@ -1,12 +1,12 @@
 import 'dart:io';
+import 'package:digislip/components/button.dart';
+import 'package:digislip/models/user.dart';
 import 'package:digislip/screens/authenticate/loading.dart';
 import 'package:digislip/screens/authenticate/reset.dart';
+import 'package:digislip/services/auth.dart';
+import 'package:digislip/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../components/button.dart';
-import '../../models/user.dart';
-import '../../services/auth.dart';
-import '../../services/database.dart';
 
 class Login extends StatefulWidget {
   final Function toggleView;
@@ -71,11 +71,6 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
           error = 'User does not exist.';
           showMessage(error, 'Not found');
         });
-      } else {
-        await DatabaseService(uid: result.user.uid, email: result.user.email)
-            .createUserData();
-        await DatabaseService(uid: result.user.uid, email: result.user.email)
-            .createVoucherData();
       }
     } catch (e) {
       print(e);
@@ -102,8 +97,6 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
       } else {
         await DatabaseService(uid: result.user.uid, email: result.user.email)
             .createUserData();
-        //await DatabaseService(uid: result.user.uid, email: result.user.email)
-          //  .createReceiptData();
         await DatabaseService(uid: result.user.uid, email: result.user.email)
             .createVoucherData();
       }

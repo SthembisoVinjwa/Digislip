@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:digislip/models/user_data.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import '../models/user_data.dart';
 
 class DatabaseService {
   final String uid;
@@ -10,24 +10,12 @@ class DatabaseService {
   DatabaseService({required this.uid, required this.email});
 
   final CollectionReference usersCollection =
-      FirebaseFirestore.instance.collection('UserData');
+      FirebaseFirestore.instance.collection('Users');
 
   final CollectionReference merchantsCollection =
       FirebaseFirestore.instance.collection('Merchants');
 
   final FirebaseStorage storage = FirebaseStorage.instance;
-
-  // Create receipt
-  Future<void> createReceiptData() async {
-    final DocumentReference userDoc = usersCollection.doc(uid);
-    final CollectionReference receiptsCollection =
-        userDoc.collection('Receipts');
-
-    final snapshot = await receiptsCollection.get();
-    if (snapshot.docs.isEmpty) {
-      await receiptsCollection.add({'initialize': 0});
-    }
-  }
 
   // Create voucher
   Future<void> createVoucherData() async {
@@ -37,7 +25,16 @@ class DatabaseService {
 
     final snapshot = await vouchersCollection.get();
     if (snapshot.docs.isEmpty) {
-      await vouchersCollection.add({'initialize': 0});
+      await vouchersCollection.add({
+        "Expirydate": "September 14, 2023 at 2:01:01 AM UTC+2",
+        "Isused": false,
+        "Merchantid": "zJHvK35B8nfwy82PHHP8",
+        "Terms": "This voucher gives you a 10% discount on any 2 tennis balls.",
+        "Type": "Json",
+        "Useddate": "July 12, 2023 at 2:00:00 PM UTC+2",
+        "Voucherdate": "July 12, 2023 at 9:09:48 AM UTC+2",
+        "Vouchernumber": "611000609009504"
+      });
     }
   }
 
@@ -50,8 +47,8 @@ class DatabaseService {
 
     if (!exists) {
       await usersCollection.doc(uid).set({
+        'Email': email,
         'Id': uid,
-        'email': email,
       });
     }
   }
@@ -61,15 +58,67 @@ class DatabaseService {
     return usersCollection.doc(uid).snapshots().map(_fromUserDataFromSnapshot);
   }
 
+  // Get receipts
+  Stream<List<Map<String, String>>> getReceipts() {
+    final DocumentReference userDoc = usersCollection.doc(uid);
+    final CollectionReference receiptsCollection =
+        userDoc.collection('Receipts');
+
+    return receiptsCollection.snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        final receiptData = {
+          'Data': _getFieldValue(doc, 'Data'),
+          'Receiptdate': _getFieldValue(doc, 'Receiptdate'),
+          'Receiptnumber': _getFieldValue(doc, 'Receiptnumber'),
+          'Source': _getFieldValue(doc, 'Source'),
+          'Merchantid': _getFieldValue(doc, 'Merchantid'),
+          'Storename': _getFieldValue(doc, 'Storename'),
+          'Type': _getFieldValue(doc, 'Type'),
+        };
+        return receiptData;
+      }).toList();
+    });
+  }
+
+  // Check if field exists, if it does not return empty string
+  String _getFieldValue(DocumentSnapshot doc, String fieldName) {
+    try {
+      return doc.get(fieldName).toString();
+    } catch (e) {
+      return '';
+    }
+  }
+
+  // Get vouchers
+  Stream<List<Map<String, String>>> getVouchers() {
+    final DocumentReference userDoc = usersCollection.doc(uid);
+    final CollectionReference vouchersCollection =
+        userDoc.collection('Vouchers');
+
+    return vouchersCollection.snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return {
+          'Expirydate': doc.get('Expirydate').toString(),
+          'Isused': doc.get('Isused').toString(),
+          'merchantid': doc.get('merchantid').toString(),
+          'merchantname': doc.get('merchantname').toString(),
+          'terms': doc.get('terms').toString(),
+          'usebydate': doc.get('usebydate').toString(),
+          'vouchercode': doc.get('vouchercode').toString(),
+        };
+      }).toList();
+    });
+  }
+
   Future<List<Map<String, String>>> getMerchants() async {
     try {
       QuerySnapshot snapshot = await merchantsCollection.get();
       List<Map<String, String>> merchantsList = [];
 
       for (var doc in snapshot.docs) {
-        String id = doc.id;
-        String name = doc.get('Name');
-        Map<String, String> merchant = {'id': id, 'name': name};
+        String id = doc.get('Id').toString();
+        String name = doc.get('Name').toString();
+        Map<String, String> merchant = {'Id': id, 'Name': name};
         merchantsList.add(merchant);
       }
 
@@ -101,11 +150,11 @@ class DatabaseService {
     final snapshot = await receiptsCollection.get();
 
     await receiptsCollection.add({
-      'data': data,
-      'date': date,
-      'merchantId': merchantId,
-      'merchantName': merchantName,
-      'type': type,
+      'Data': data,
+      'Receiptdate': date,
+      'Merchantid': merchantId,
+      'Storename': merchantName,
+      'Type': type,
     });
   }
 
@@ -122,6 +171,18 @@ class DatabaseService {
       return downloadUrl;
     } catch (e) {
       print('Error uploading profile picture: $e');
+      return '';
+    }
+  }
+
+  // get receipt picture url
+  Future<String> getReceiptImage(String imageUrl) async {
+    try {
+      final downloadUrl =
+          await FirebaseStorage.instance.ref().child(imageUrl).getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      print(e);
       return '';
     }
   }

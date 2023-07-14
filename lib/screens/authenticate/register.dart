@@ -1,8 +1,8 @@
+import 'package:digislip/components/button.dart';
 import 'package:digislip/screens/authenticate/loading.dart';
+import 'package:digislip/services/auth.dart';
+import 'package:digislip/services/database.dart';
 import 'package:flutter/material.dart';
-import '../../components/button.dart';
-import '../../services/auth.dart';
-import '../../services/database.dart';
 
 class Register extends StatefulWidget {
   final Function toggleView;

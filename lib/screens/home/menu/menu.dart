@@ -1,5 +1,5 @@
+import 'package:digislip/services/auth.dart';
 import 'package:flutter/material.dart';
-import '../../../services/auth.dart';
 
 class Menu extends StatefulWidget {
   final Function toPage;

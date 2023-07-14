@@ -1,5 +1,5 @@
+import 'package:digislip/services/auth.dart';
 import 'package:flutter/material.dart';
-import '../../../../../services/auth.dart';
 
 class Codes extends StatefulWidget {
   const Codes({Key? key}) : super(key: key);

@@ -1,5 +1,7 @@
 import 'package:delayed_display/delayed_display.dart';
+import 'package:digislip/screens/provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DashboardItems extends StatefulWidget {
   final Function toPage;
@@ -63,13 +65,19 @@ class _DashboardItemsState extends State<DashboardItems> {
   }
 
   Widget _DashboardOptionCard(ItemModel item) {
+    final provider = Provider.of<MainProvider>(context);
+    bool isSubscribed = provider.isSubscribed;
+
     return GestureDetector(
       onTap: () {
-        print(item.title);
         if (item.title == 'Receipts') {
           widget.toPage(4);
         } else if (item.title == 'Upload') {
-          widget.toPage(5);
+          if (isSubscribed) {
+            widget.toPage(5);
+          } else {
+            widget.toPage(2);
+          }
         } else if (item.title == 'Codes') {
           widget.toPage(6);
         } else if (item.title == 'Vouchers') {
@@ -88,20 +96,20 @@ class _DashboardItemsState extends State<DashboardItems> {
           width: 120,
           height: 70,
           padding: const EdgeInsets.fromLTRB(10, 16, 16, 10),
-          margin: EdgeInsets.only(bottom: 15),
+          margin: const EdgeInsets.only(bottom: 15),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [Theme.of(context).primaryColor, Theme.of(context).colorScheme.secondary],
-              stops: [0.4, 1.0], // 30% secondary color, 70% primary color
+              stops: const [0.4, 1.0], // 30% secondary color, 70% primary color
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
             ),
             border: Border.all(color: Theme.of(context).primaryColor, width: 1),
-            borderRadius: BorderRadius.all(Radius.circular(16)),
-            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 1)],
+            borderRadius: const BorderRadius.all(Radius.circular(16)),
+            boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 1)],
           ),
           child: DelayedDisplay(
-            delay: Duration(seconds: 1),
+            delay: const Duration(seconds: 1),
             child: _DashboardOptionCardStyle(item),
           ),
         )

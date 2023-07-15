@@ -3,8 +3,10 @@ import 'package:digislip/screens/home/dashboard/items/reciepts/receipts.dart';
 import 'package:digislip/screens/home/menu/menu.dart';
 import 'package:digislip/screens/home/menu/terms_and_conditions.dart';
 import 'package:digislip/screens/home/subscription/subscription.dart';
+import 'package:digislip/screens/provider/provider.dart';
 import 'package:digislip/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'account/account.dart';
 import 'dashboard/items/codes/codes.dart';
 import 'dashboard/items/upload/upload.dart';
@@ -42,14 +44,14 @@ class _HomeState extends State<Home> {
     screens = <Widget>[
       Menu(toPage: toPage),
       Dashboard(toPage: toPage),
-      const Subscription(),
-      const Account(),
+      Subscription(toPage: toPage,),
+      Account(toPage: toPage),
       Receipts(toPage: toPage),
       Upload(toPage: toPage),
-      const Codes(),
+      Codes(toPage: toPage,),
       Vouchers(toPage: toPage),
-      const TermsAndConditions(),
-      const About(),
+      TermsAndConditions(toPage: toPage),
+      About(toPage: toPage),
     ];
   }
 
@@ -101,7 +103,7 @@ class _HomeState extends State<Home> {
                   label: 'Home',
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.check_circle_rounded, size: 28, color: Colors.white),
+                  icon: Icon(Icons.card_membership_rounded, size: 28, color: Colors.white),
                   label: 'Subscription',
                 ),
                 NavigationDestination(
@@ -113,7 +115,14 @@ class _HomeState extends State<Home> {
           ),
         ),
       ),
-      body: screens[pageIndex],
+      body: ChangeNotifierProvider<MainProvider>(
+          create: (context) => MainProvider(),
+          child: Consumer<MainProvider>(
+            builder: (context, provider, _) {
+              return screens[pageIndex];
+            },
+          ),
+      ),
     );
   }
 }

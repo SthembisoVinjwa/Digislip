@@ -2,7 +2,7 @@ import 'dart:typed_data';
 import 'package:digislip/components/button.dart';
 import 'package:digislip/components/utils.dart';
 import 'package:digislip/models/user.dart';
-import 'package:digislip/screens/authenticate/loading.dart';
+import 'package:digislip/components/loading.dart';
 import 'package:digislip/services/auth.dart';
 import 'package:digislip/services/database.dart';
 import 'package:flutter/material.dart';
@@ -352,9 +352,7 @@ class _UploadState extends State<Upload> {
                                         mainAxisSize: MainAxisSize.min,
                                         children: const [
                                           SizedBox(height: 20),
-                                          Loading(),
-                                          SizedBox(height: 30),
-                                          Text('Uploading Receipt...'),
+                                          Loading(message: 'Uploading Receipt...',),
                                         ],
                                       ),
                                     );

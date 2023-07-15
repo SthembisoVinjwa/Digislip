@@ -31,7 +31,7 @@ class _DashboardState extends State<Dashboard> {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: const [
                 Icon(Icons.receipt_long, size: 28),
                 SizedBox(width: 2),
                 Text(
@@ -76,7 +76,7 @@ class _DashboardState extends State<Dashboard> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
                   child: Container(
-                    padding: EdgeInsets.all(15),
+                    padding: const EdgeInsets.all(15),
                     color: Theme.of(context).cardColor,
                     height: 200,
                     child: BarcodeWidget(

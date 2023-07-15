@@ -1,5 +1,5 @@
 import 'package:digislip/models/user.dart';
-import 'package:digislip/screens/authenticate/loading.dart';
+import 'package:digislip/components/loading.dart';
 import 'package:digislip/screens/home/dashboard/items/reciepts/receipt_card.dart';
 import 'package:digislip/screens/home/dashboard/items/vouchers/voucher_card.dart';
 import 'package:digislip/services/auth.dart';
@@ -257,9 +257,7 @@ class _VouchersState extends State<Vouchers> {
                                 mainAxisSize:
                                 MainAxisSize.min,
                                 children: const [
-                                  Loading(), // Loading indicator widget
-                                  SizedBox(height: 30),
-                                  Text('Loading Voucher...'),
+                                  Loading(message: 'Loading Voucher...',), // Loading indicator widget
                                   SizedBox(height: 60),
                                 ],
                               ),
@@ -372,11 +370,7 @@ class _VouchersState extends State<Vouchers> {
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: const [
-                                      Loading(),
-                                      // Loading indicator widget
-                                      SizedBox(height: 30),
-                                      Text('Loading Vouchers...'),
-                                      // Optional text to display
+                                      Loading(message: 'Loading Vouchers...',),
                                     ],
                                   ),
                                 );

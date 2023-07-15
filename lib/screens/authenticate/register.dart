@@ -1,7 +1,6 @@
 import 'package:digislip/components/button.dart';
-import 'package:digislip/screens/authenticate/loading.dart';
+import 'package:digislip/screens/authenticate/auth_loading.dart';
 import 'package:digislip/services/auth.dart';
-import 'package:digislip/services/database.dart';
 import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
@@ -83,7 +82,7 @@ class _RegisterState extends State<Register> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return loading? const Loading() : Scaffold(
+    return loading? const AuthLoading(message: 'Creating your account...',) : Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0,
@@ -335,7 +334,7 @@ class _RegisterState extends State<Register> with WidgetsBindingObserver {
                                               fontWeight: FontWeight.bold,
                                               fontSize: 16,
                                               color: Theme.of(context)
-                                                  .secondaryHeaderColor),
+                                                  .colorScheme.secondary),
                                         ))
                                   ],
                                 ),

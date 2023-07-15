@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Account extends StatefulWidget {
-  const Account({Key? key}) : super(key: key);
+  final Function toPage;
+  const Account({Key? key, required this.toPage}) : super(key: key);
 
   @override
   State<Account> createState() => _AccountState();
@@ -83,12 +84,39 @@ class _AccountState extends State<Account> {
                         padding: const EdgeInsets.all(15),
                         child: Column(
                           children: [
-                            const Text(
-                              'User Account',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
+                            Row(
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    widget.toPage(1);
+                                  },
+                                  icon: Icon(
+                                    Icons.arrow_back,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Center(
+                                    child: Text(
+                                      'User Account',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                          color:
+                                          Theme.of(context).primaryColor),
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    //For padding
+                                  },
+                                  icon: Icon(
+                                    Icons.arrow_back,
+                                    color: Theme.of(context).cardColor,
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 126),
                             Row(
@@ -103,7 +131,9 @@ class _AccountState extends State<Account> {
                                 const SizedBox(width: 10),
                                 Text(
                                   user!.uid,
-                                  style: const TextStyle(fontSize: 14),
+                                  style: const TextStyle(fontSize: 12),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
                                 ),
                               ],
                             ),
@@ -119,7 +149,7 @@ class _AccountState extends State<Account> {
                                 ),
                                 const SizedBox(width: 10),
                                 Text(
-                                  user!.email!,
+                                  user.email!,
                                   style: const TextStyle(fontSize: 14),
                                 ),
                               ],

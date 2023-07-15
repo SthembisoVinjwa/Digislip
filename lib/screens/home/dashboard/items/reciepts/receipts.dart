@@ -1,6 +1,7 @@
 import 'package:digislip/models/user.dart';
-import 'package:digislip/screens/authenticate/loading.dart';
+import 'package:digislip/components/loading.dart';
 import 'package:digislip/screens/home/dashboard/items/reciepts/receipt_card.dart';
+import 'package:digislip/screens/provider/provider.dart';
 import 'package:digislip/services/auth.dart';
 import 'package:digislip/services/database.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,8 @@ class _ReceiptsState extends State<Receipts> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<CustomUser?>(context);
+    final provider = Provider.of<MainProvider>(context);
+    bool isSubscribed = provider.isSubscribed;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -223,9 +226,7 @@ class _ReceiptsState extends State<Receipts> {
                                                   mainAxisSize:
                                                       MainAxisSize.min,
                                                   children: const [
-                                                    Loading(), // Loading indicator widget
-                                                    SizedBox(height: 30),
-                                                    Text('Loading Receipt...'),
+                                                    Loading(message: 'Loading Receipt...',), // Loading indicator widget
                                                     SizedBox(height: 60),
                                                   ],
                                                 ),
@@ -256,9 +257,7 @@ class _ReceiptsState extends State<Receipts> {
                                         mainAxisSize:
                                             MainAxisSize.min,
                                         children: const [
-                                          Loading(), // Loading indicator widget
-                                          SizedBox(height: 30),
-                                          Text('Loading Receipt...'),
+                                          Loading(message: 'Loading Receipt...',), // Loading indicator widget
                                           SizedBox(height: 60),
                                         ],
                                       ),
@@ -276,6 +275,9 @@ class _ReceiptsState extends State<Receipts> {
                                     snapshot.data!.isNotEmpty) {
                                   final List<Map<String, String>> receipts =
                                       snapshot.data!;
+                                  if (!isSubscribed) {
+                                    receipts.removeWhere((receipt) => receipt['Type'] == 'Upload');
+                                  }
                                   if (sortDescending) {
                                     receipts.sort((a, b) {
                                       DateTime dateA;
@@ -372,11 +374,7 @@ class _ReceiptsState extends State<Receipts> {
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: const [
-                                        Loading(),
-                                        // Loading indicator widget
-                                        SizedBox(height: 30),
-                                        Text('Loading Receipts...'),
-                                        // Optional text to display
+                                        Loading(message: 'Loading Receipts...',),
                                       ],
                                     ),
                                   );

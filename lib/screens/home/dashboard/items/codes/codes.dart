@@ -2,7 +2,9 @@ import 'package:digislip/services/auth.dart';
 import 'package:flutter/material.dart';
 
 class Codes extends StatefulWidget {
-  const Codes({Key? key}) : super(key: key);
+  final Function toPage;
+
+  const Codes({Key? key, required this.toPage}) : super(key: key);
 
   @override
   State<Codes> createState() => _CodesState();
@@ -53,7 +55,8 @@ class _CodesState extends State<Codes> {
         ),
       ),
       body: Container(
-        padding: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 5.0, top: 5.0),
+        padding:
+        const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 5.0, top: 5.0),
         alignment: Alignment.center,
         child: Card(
           elevation: 5.0,
@@ -66,7 +69,67 @@ class _CodesState extends State<Codes> {
             padding: const EdgeInsets.all(20.0),
             child: Column(
               children: [
-                Container()
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Container(
+                      alignment: Alignment.topCenter,
+                      color: Theme.of(context).cardColor,
+                      padding: EdgeInsets.all(15),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  widget.toPage(1);
+                                },
+                                icon: Icon(
+                                  Icons.arrow_back,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    'Codes',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color:
+                                        Theme.of(context).primaryColor),
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  //For padding
+                                },
+                                icon: Icon(
+                                  Icons.arrow_back,
+                                  color: Theme.of(context).cardColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 196,
+                          ),
+                          const Text(
+                                'Coming soon!!!',
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
+                          ),
+                          const Spacer(),
+                          const Text(
+                            '2023 - Copyright - DigiSlips',
+                            style: TextStyle(color: Colors.grey, fontSize: 16),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           ),

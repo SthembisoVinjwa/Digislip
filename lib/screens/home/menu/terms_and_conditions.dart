@@ -2,7 +2,8 @@ import 'package:digislip/services/auth.dart';
 import 'package:flutter/material.dart';
 
 class TermsAndConditions extends StatefulWidget {
-  const TermsAndConditions({Key? key}) : super(key: key);
+  final Function toPage;
+  const TermsAndConditions({Key? key, required this.toPage}) : super(key: key);
 
   @override
   State<TermsAndConditions> createState() => _TermsAndConditionsState();
@@ -74,13 +75,40 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
                       color: Theme.of(context).cardColor,
                       padding: EdgeInsets.all(15),
                       child: Column(
-                        children: const [
-                          Text(
-                            'Terms and Conditions',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
+                        children: [
+                          Row(
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  widget.toPage(0);
+                                },
+                                icon: Icon(
+                                  Icons.arrow_back,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    'Terms and conditions',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color:
+                                        Theme.of(context).primaryColor),
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  //For padding
+                                },
+                                icon: Icon(
+                                  Icons.arrow_back,
+                                  color: Theme.of(context).cardColor,
+                                ),
+                              ),
+                            ],
                           ),
                           SizedBox(height: 16,),
                           Text(

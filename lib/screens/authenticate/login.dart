@@ -1,10 +1,9 @@
 import 'dart:io';
 import 'package:digislip/components/button.dart';
 import 'package:digislip/models/user.dart';
-import 'package:digislip/screens/authenticate/loading.dart';
+import 'package:digislip/screens/authenticate/auth_loading.dart';
 import 'package:digislip/screens/authenticate/reset.dart';
 import 'package:digislip/services/auth.dart';
-import 'package:digislip/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -110,7 +109,7 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
     final user = Provider.of<CustomUser?>(context);
 
     return loading
-        ? const Loading()
+        ? const AuthLoading(message: 'Signing you in...')
         : Scaffold(
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
@@ -295,7 +294,7 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                                               fontWeight: FontWeight.bold,
                                               fontSize: 16,
                                               color: Theme.of(context)
-                                                  .secondaryHeaderColor),
+                                                  .colorScheme.secondary),
                                         ))),
                               ),
                               Padding(
@@ -528,7 +527,7 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 16,
                                                     color: Theme.of(context)
-                                                        .secondaryHeaderColor),
+                                                        .colorScheme.secondary),
                                               ))
                                         ],
                                       ),

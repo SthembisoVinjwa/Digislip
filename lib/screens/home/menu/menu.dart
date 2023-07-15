@@ -1,5 +1,7 @@
+import 'package:digislip/screens/provider/provider.dart';
 import 'package:digislip/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Menu extends StatefulWidget {
   final Function toPage;
@@ -90,7 +92,6 @@ class _MenuState extends State<Menu> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          print(item.title);
                           if (item.title == 'Account') {
                             widget.toPage(3);
                           } else if (item.title == 'About') {
@@ -104,10 +105,10 @@ class _MenuState extends State<Menu> {
                           child: Card(
                             child: Row(
                               children: [
-                                SizedBox(width: 10),
+                                const SizedBox(width: 10),
                                 Icon(item.Icon,
                                     color: Theme.of(context).primaryColor),
-                                SizedBox(width: 10),
+                                const SizedBox(width: 10),
                                 Text(item.title,
                                     style: TextStyle(
                                         fontSize: 16,
@@ -126,12 +127,15 @@ class _MenuState extends State<Menu> {
                           thickness: 2,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 8,
                       )
                     ],
                   );
                 }
+
+                final provider = Provider.of<MainProvider>(context);
+                bool isSubscribed = provider.isSubscribed;
 
                 return GestureDetector(
                   onTap: () async {
@@ -144,7 +148,11 @@ class _MenuState extends State<Menu> {
                     } else if (item.title == 'Receipts') {
                       widget.toPage(4);
                     }else if (item.title == 'Upload') {
-                      widget.toPage(5);
+                      if (isSubscribed) {
+                        widget.toPage(5);
+                      } else {
+                        widget.toPage(2);
+                      }
                     } else if (item.title == 'Codes') {
                       widget.toPage(6);
                     } else if (item.title == 'Vouchers') {

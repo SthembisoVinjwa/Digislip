@@ -130,8 +130,10 @@ class _DashboardItemsState extends State<DashboardItems> {
 
   @override
   Widget build(BuildContext context) {
+    final x = MediaQuery.of(context).size.height;
     return Container(
       color: Theme.of(context).cardColor,
+      padding: EdgeInsets.only(top: x > 806? 20 : 0),
       child: _DashboardList(),
     );
   }

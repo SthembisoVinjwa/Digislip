@@ -35,7 +35,8 @@ class _UploadState extends State<Upload> {
     String? uid = Provider.of<CustomUser?>(context, listen: false)!.uid;
     String? email = Provider.of<CustomUser?>(context, listen: false)!.email;
 
-    merchantsData = await DatabaseService(uid: uid, email: email!).getMerchants();
+    merchantsData =
+        await DatabaseService(uid: uid, email: email!).getMerchants();
 
     merchantsData.sort((a, b) {
       String nameA = a['Name']!.toLowerCase();
@@ -210,8 +211,21 @@ class _UploadState extends State<Upload> {
                               children: [
                                 DropdownButtonFormField<String>(
                                   dropdownColor: Theme.of(context).primaryColor,
-                                  decoration: const InputDecoration(
+                                  decoration: InputDecoration(
                                     contentPadding: EdgeInsets.all(5),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                          width: 3.0),
+                                    ),
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Theme.of(context)
+                                              .cardColor,
+                                          width: 3.0),
+                                    ),
                                   ),
                                   items: merchants,
                                   iconEnabledColor: Theme.of(context).cardColor,
@@ -259,7 +273,8 @@ class _UploadState extends State<Upload> {
                                         return Theme(
                                           data: ThemeData.light().copyWith(
                                             colorScheme:
-                                                const ColorScheme.light().copyWith(
+                                                const ColorScheme.light()
+                                                    .copyWith(
                                               primary: Theme.of(context)
                                                   .primaryColor, // Set primary color to green
                                             ), // Set background color to white
@@ -336,6 +351,7 @@ class _UploadState extends State<Upload> {
                                       content: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: const [
+                                          SizedBox(height: 20),
                                           Loading(),
                                           SizedBox(height: 30),
                                           Text('Uploading Receipt...'),
@@ -365,7 +381,9 @@ class _UploadState extends State<Upload> {
                                 if (mounted) {
                                   Navigator.of(context).pop();
                                 }
-                                showMessage('Receipt was successfully uploaded.', 'Uploaded Receipt');
+                                showMessage(
+                                    'Receipt was successfully uploaded.',
+                                    'Uploaded Receipt');
                               } catch (e) {
                                 print(e);
                                 if (mounted) {

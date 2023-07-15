@@ -21,8 +21,9 @@ class _ReceiptsState extends State<Receipts> {
   bool viewReceipt = false;
   Map<String, String>? selectedReceipt;
   String imageUrl = '';
+  bool sortDescending = true;
 
-  void toReceitList() {
+  void toReceiptList() {
     setState(() {
       viewReceipt = false;
       selectedReceipt = {};
@@ -100,7 +101,7 @@ class _ReceiptsState extends State<Receipts> {
                               IconButton(
                                 onPressed: () {
                                   if (viewReceipt) {
-                                    toReceitList();
+                                    toReceiptList();
                                   } else {
                                     widget.toPage(1);
                                   }
@@ -121,13 +122,23 @@ class _ReceiptsState extends State<Receipts> {
                                   ),
                                 ),
                               ),
-                              IconButton(
-                                // Just for padding
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.arrow_back,
-                                  color: Theme.of(context).cardColor,
-                                ),
+                              Row(
+                                children: [
+                                  IconButton(
+                                    // Just for padding
+                                    onPressed: () {
+                                      setState(() {
+                                        sortDescending = !sortDescending;
+                                      });
+                                    },
+                                    icon: Icon(
+                                      sortDescending? Icons.arrow_circle_up_rounded : Icons.arrow_circle_down_rounded,
+                                      color: Theme.of(context).primaryColor,
+                                      size: 29,
+                                    ),
+                                  ),
+                                  SizedBox(width: 8,),
+                                ],
                               ),
                             ],
                           ),
@@ -168,7 +179,7 @@ class _ReceiptsState extends State<Receipts> {
                                             ),
                                             trailing: IconButton(
                                                 onPressed: () {
-                                                  toReceitList();
+                                                  toReceiptList();
                                                 },
                                                 icon: Icon(Icons.cancel_rounded,
                                                     size: 30,
@@ -233,7 +244,7 @@ class _ReceiptsState extends State<Receipts> {
                                     .getLines(selectedReceipt!['Receiptid']!),
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
-                                    return ReceiptCard(receiptLines: snapshot.data!, receipt: selectedReceipt!, previous: toReceitList,);
+                                    return ReceiptCard(receiptLines: snapshot.data!, receipt: selectedReceipt!, previous: toReceiptList,);
                                   } else if (snapshot.hasError) {
                                     return Text(
                                         snapshot.error.toString());
@@ -265,17 +276,31 @@ class _ReceiptsState extends State<Receipts> {
                                     snapshot.data!.isNotEmpty) {
                                   final List<Map<String, String>> receipts =
                                       snapshot.data!;
-                                  receipts.sort((a, b) {
-                                    DateTime dateA;
-                                    DateTime dateB;
+                                  if (sortDescending) {
+                                    receipts.sort((a, b) {
+                                      DateTime dateA;
+                                      DateTime dateB;
 
-                                    dateA = DateFormat('dd/MM/yyyy')
-                                        .parse(a['Receiptdate']!);
-                                    dateB = DateFormat('dd/MM/yyyy')
-                                        .parse(b['Receiptdate']!);
+                                      dateA = DateFormat('dd/MM/yyyy')
+                                          .parse(a['Receiptdate']!);
+                                      dateB = DateFormat('dd/MM/yyyy')
+                                          .parse(b['Receiptdate']!);
 
-                                    return dateB.compareTo(dateA);
-                                  });
+                                      return dateB.compareTo(dateA);
+                                    });
+                                  } else {
+                                    receipts.sort((a, b) {
+                                      DateTime dateA;
+                                      DateTime dateB;
+
+                                      dateA = DateFormat('dd/MM/yyyy')
+                                          .parse(a['Receiptdate']!);
+                                      dateB = DateFormat('dd/MM/yyyy')
+                                          .parse(b['Receiptdate']!);
+
+                                      return dateA.compareTo(dateB);
+                                    });
+                                  }
                                   return ListView.builder(
                                     itemCount: receipts.length,
                                     itemBuilder: (context, index) {

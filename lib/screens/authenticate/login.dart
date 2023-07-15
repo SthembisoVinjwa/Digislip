@@ -94,11 +94,6 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
           error = 'Could not sign in with Google.';
           showMessage(error, 'Google Sign in');
         });
-      } else {
-        await DatabaseService(uid: result.user.uid, email: result.user.email)
-            .createUserData();
-        await DatabaseService(uid: result.user.uid, email: result.user.email)
-            .createVoucherData();
       }
     } catch (e) {
       print(e);

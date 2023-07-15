@@ -1,5 +1,9 @@
+import 'package:digislip/components/button.dart';
+import 'package:digislip/models/user.dart';
+import 'package:digislip/screens/authenticate/reset.dart';
+import 'package:digislip/services/auth.dart';
 import 'package:flutter/material.dart';
-import '../../../services/auth.dart';
+import 'package:provider/provider.dart';
 
 class Account extends StatefulWidget {
   const Account({Key? key}) : super(key: key);
@@ -13,6 +17,8 @@ class _AccountState extends State<Account> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<CustomUser?>(context);
+
     return Scaffold(
       backgroundColor: Theme.of(context).cardColor,
       appBar: AppBar(
@@ -53,7 +59,8 @@ class _AccountState extends State<Account> {
         ),
       ),
       body: Container(
-        padding: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 5.0, top: 5.0),
+        padding:
+            const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 5.0, top: 5.0),
         alignment: Alignment.center,
         child: Card(
           elevation: 5.0,
@@ -66,7 +73,84 @@ class _AccountState extends State<Account> {
             padding: const EdgeInsets.all(20.0),
             child: Column(
               children: [
-                Container()
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: SafeArea(
+                      child: Container(
+                        alignment: Alignment.center,
+                        color: Theme.of(context).cardColor,
+                        padding: const EdgeInsets.all(15),
+                        child: Column(
+                          children: [
+                            const Text(
+                              'User Account',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            const SizedBox(height: 126),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  'User ID:',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(width: 10),
+                                Text(
+                                  user!.uid,
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 5),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  'Email:',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(width: 10),
+                                Text(
+                                  user!.email!,
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 25),
+                            MainButton(
+                              onTap: () async {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                        const Reset()));
+                              },
+                              color: Theme.of(context).canvasColor,
+                              title: 'Change Password',
+                              margin: 45.0,
+                            ),
+                            const Spacer(),
+                            const Text(
+                              '2023 - Copyright - DigiSlips',
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

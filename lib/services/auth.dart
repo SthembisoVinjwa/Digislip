@@ -40,8 +40,6 @@ class AuthService {
       User? user = result.user;
       await DatabaseService(uid: user!.uid, email: user.email!)
           .createUserData();
-      await DatabaseService(uid: user!.uid, email: user.email!)
-          .createVoucherData();
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
@@ -76,7 +74,10 @@ class AuthService {
         idToken: googleAuth.idToken,
       );
 
-      return await _auth.signInWithCredential(credential);
+      final result = await _auth.signInWithCredential(credential);
+      await DatabaseService(uid: result.user!.uid, email: result.user!.email!)
+          .createUserData();
+      return result;
     } catch (e) {
       print(e);
       return null;

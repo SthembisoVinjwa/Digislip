@@ -66,7 +66,42 @@ class _AboutState extends State<About> {
             padding: const EdgeInsets.all(20.0),
             child: Column(
               children: [
-                Container()
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Container(
+                      alignment: Alignment.topCenter,
+                      color: Theme.of(context).cardColor,
+                      padding: EdgeInsets.all(15),
+                      child: Column(
+                        children: const [
+                          Text(
+                            'About Digislips',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          SizedBox(height: 16,),
+                          Text(
+                            'Welcome to DigiSlips, your digital receipt management app. '
+                                'Keep track of your receipts, store them securely, and access them anytime, anywhere. '
+                                'We are committed to providing a seamless and convenient experience for managing your receipts. '
+                                'If you have any questions or feedback, please reach out to our support team.',
+                            style: TextStyle(fontSize: 14),
+                            textAlign: TextAlign.center,
+                          ),
+                          Spacer(),
+                          Text(
+                            '2023 - Copyright - DigiSlips',
+                            style: TextStyle(
+                                color: Colors.grey, fontSize: 16),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           ),

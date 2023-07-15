@@ -47,7 +47,7 @@ class _HomeState extends State<Home> {
       Receipts(toPage: toPage),
       Upload(toPage: toPage),
       const Codes(),
-      const Vouchers(),
+      Vouchers(toPage: toPage),
       const TermsAndConditions(),
       const About(),
     ];

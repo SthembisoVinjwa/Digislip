@@ -81,6 +81,29 @@ class DatabaseService {
     });
   }
 
+
+  Stream<List<Map<String, String>>> getVouchers() {
+    final DocumentReference userDoc = usersCollection.doc(uid);
+    final CollectionReference vouchersCollection =
+    userDoc.collection('Vouchers');
+
+    return vouchersCollection.snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        final voucherData = {
+          'Expirydate': _getFieldValue(doc, 'Expirydate'),
+          'Isused': _getFieldValue(doc, 'Isused'),
+          'Merchantid': _getFieldValue(doc, 'Merchantid'),
+          'Terms': _getFieldValue(doc, 'Terms'),
+          'Type': _getFieldValue(doc, 'Type'),
+          'Useddate': _getFieldValue(doc, 'Useddate'),
+          'Voucherdate': _getFieldValue(doc, 'Voucherdate'),
+          'Vouchernumber': _getFieldValue(doc, 'Vouchernumber'),
+        };
+        return voucherData;
+      }).toList();
+    });
+  }
+
   // Check if field exists, if it does not return empty string
   String _getFieldValue(DocumentSnapshot doc, String fieldName) {
     try {
@@ -107,27 +130,6 @@ class DatabaseService {
       };
       return receiptLines;
     }).toList();
-  }
-
-  // Get Vouchers
-  Stream<List<Map<String, String>>> getVouchers() {
-    final DocumentReference userDoc = usersCollection.doc(uid);
-    final CollectionReference vouchersCollection =
-        userDoc.collection('Vouchers');
-
-    return vouchersCollection.snapshots().map((snapshot) {
-      return snapshot.docs.map((doc) {
-        return {
-          'Expirydate': doc.get('Expirydate').toString(),
-          'Isused': doc.get('Isused').toString(),
-          'merchantid': doc.get('merchantid').toString(),
-          'merchantname': doc.get('merchantname').toString(),
-          'terms': doc.get('terms').toString(),
-          'usebydate': doc.get('usebydate').toString(),
-          'vouchercode': doc.get('vouchercode').toString(),
-        };
-      }).toList();
-    });
   }
 
   Future<List<Map<String, String>>> getMerchants() async {

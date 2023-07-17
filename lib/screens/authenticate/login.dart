@@ -108,6 +108,9 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     final user = Provider.of<CustomUser?>(context);
 
+    final x = MediaQuery.of(context).size.height;
+    final smallScreen = x < 700;
+
     return loading
         ? const AuthLoading(message: 'Signing you in...')
         : Scaffold(
@@ -155,38 +158,54 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Expanded(
-                      flex: (_emailError || _passwordError) ? 2 : 3,
+                      flex: (_emailError || _passwordError)
+                          ? smallScreen
+                              ? 1
+                              : 2
+                          : smallScreen
+                              ? 1
+                              : 3,
                       child: Container(
                         padding: EdgeInsets.only(
                             left: 30.0,
-                            bottom:
-                                (_emailError || _passwordError) ? 10.0 : 30.0),
+                            bottom: (_emailError || _passwordError)
+                                ? 10.0
+                                : smallScreen
+                                    ? 10.0
+                                    : 30.0),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisAlignment: smallScreen
+                              ? MainAxisAlignment.start
+                              : MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            Container(
-                                alignment: Alignment.center,
-                                child: const Icon(
-                                  Icons.person_2_rounded,
-                                  color: Colors.white,
-                                  size: 60,
-                                )),
-                            const Text('Sign In',
+                            if (!smallScreen)
+                              Container(
+                                  alignment: Alignment.center,
+                                  child: const Icon(
+                                    Icons.person_2_rounded,
+                                    color: Colors.white,
+                                    size: 60,
+                                  )),
+                            Text('Sign In',
                                 style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 32,
+                                    fontSize: smallScreen ? 22 : 32,
                                     fontWeight: FontWeight.bold)),
-                            const Text('Sign in with email and password',
+                            Text('Sign in with email and password',
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 16,
+                                  fontSize: smallScreen ? 14 : 16,
                                 ))
                           ],
                         ),
                       )),
                   Expanded(
-                      flex: 9,
+                      flex: smallScreen
+                          ? (_emailError || _passwordError)
+                              ? 7
+                              : 6
+                          : 9,
                       child: Form(
                         key: _formKey,
                         child: Container(
@@ -196,8 +215,19 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
                               Padding(
-                                padding: const EdgeInsets.all(15),
+                                padding: EdgeInsets.only(
+                                  left: 15,
+                                  right: 15,
+                                  top: smallScreen ? 10 : 15,
+                                  bottom: smallScreen
+                                      ? (_emailError || _passwordError)
+                                          ? 0
+                                          : 10
+                                      : 15,
+                                ),
                                 child: TextFormField(
+                                  style: TextStyle(
+                                      fontSize: smallScreen ? 14 : 16),
                                   validator: (val) {
                                     if (val!.isEmpty) {
                                       _emailError = true;
@@ -220,19 +250,35 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                                   },
                                   controller: _emailController,
                                   keyboardType: TextInputType.emailAddress,
-                                  decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    floatingLabelBehavior:
-                                        FloatingLabelBehavior.always,
-                                    labelText: 'Email',
-                                    hintText: 'Enter your email',
-                                  ),
+                                  decoration: smallScreen
+                                      ? const InputDecoration(
+                                          isDense: true,
+                                          contentPadding: EdgeInsets.fromLTRB(
+                                              20, 20, 20, 3),
+                                          border: OutlineInputBorder(),
+                                          floatingLabelBehavior:
+                                              FloatingLabelBehavior.always,
+                                          labelText: 'Email',
+                                          hintText: 'Enter your email',
+                                        )
+                                      : const InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          floatingLabelBehavior:
+                                              FloatingLabelBehavior.always,
+                                          labelText: 'Email',
+                                          hintText: 'Enter your email',
+                                        ),
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 15, right: 15, top: 15, bottom: 0),
+                                padding: EdgeInsets.only(
+                                    left: 15,
+                                    right: 15,
+                                    top: smallScreen ? 10 : 15,
+                                    bottom: 0),
                                 child: TextFormField(
+                                  style: TextStyle(
+                                      fontSize: smallScreen ? 14 : 16),
                                   validator: (val) {
                                     if (val!.isEmpty) {
                                       setState(() {
@@ -249,39 +295,78 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                                   controller: _passwordController,
                                   obscureText: _passwordObscure,
                                   keyboardType: TextInputType.visiblePassword,
-                                  decoration: InputDecoration(
-                                    suffixIcon: IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          _passwordObscure = !_passwordObscure;
-                                        });
-                                      },
-                                      icon: _passwordObscure
-                                          ? Icon(
-                                              Icons.visibility,
-                                              color:
-                                                  Theme.of(context).canvasColor,
-                                            )
-                                          : Icon(
-                                              Icons.visibility_off,
-                                              color:
-                                                  Theme.of(context).canvasColor,
-                                            ),
-                                    ),
-                                    border: const OutlineInputBorder(),
-                                    floatingLabelBehavior:
-                                        FloatingLabelBehavior.always,
-                                    labelText: 'Password',
-                                    hintText: 'Enter your password',
-                                  ),
+                                  decoration: smallScreen
+                                      ? InputDecoration(
+                                          isDense: true,
+                                          contentPadding:
+                                              const EdgeInsets.fromLTRB(
+                                                  20, 20, 20, 3),
+                                          suffixIcon: IconButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                _passwordObscure =
+                                                    !_passwordObscure;
+                                              });
+                                            },
+                                            icon: _passwordObscure
+                                                ? Icon(
+                                                    Icons.visibility,
+                                                    color: Theme.of(context)
+                                                        .canvasColor,
+                                                  )
+                                                : Icon(
+                                                    Icons.visibility_off,
+                                                    color: Theme.of(context)
+                                                        .canvasColor,
+                                                  ),
+                                          ),
+                                          border: const OutlineInputBorder(),
+                                          floatingLabelBehavior:
+                                              FloatingLabelBehavior.always,
+                                          labelText: 'Password',
+                                          hintText: 'Enter your password',
+                                        )
+                                      : InputDecoration(
+                                          suffixIcon: IconButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                _passwordObscure =
+                                                    !_passwordObscure;
+                                              });
+                                            },
+                                            icon: _passwordObscure
+                                                ? Icon(
+                                                    Icons.visibility,
+                                                    color: Theme.of(context)
+                                                        .canvasColor,
+                                                  )
+                                                : Icon(
+                                                    Icons.visibility_off,
+                                                    color: Theme.of(context)
+                                                        .canvasColor,
+                                                  ),
+                                          ),
+                                          border: const OutlineInputBorder(),
+                                          floatingLabelBehavior:
+                                              FloatingLabelBehavior.always,
+                                          labelText: 'Password',
+                                          hintText: 'Enter your password',
+                                        ),
                                 ),
                               ),
                               Align(
                                 alignment: Alignment.centerRight,
                                 child: Padding(
-                                    padding: const EdgeInsets.only(right: 10),
-                                    child: TextButton(
-                                        onPressed: () {
+                                    padding: EdgeInsets.only(
+                                        right: 15,
+                                        bottom: smallScreen ? 8 : 15,
+                                        top: smallScreen
+                                            ? (_emailError || _passwordError)
+                                                ? 0
+                                                : 8
+                                            : 15),
+                                    child: GestureDetector(
+                                        onTap: () {
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(
@@ -292,9 +377,10 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                                           'Forgot Password?',
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 16,
+                                              fontSize: smallScreen ? 12 : 16,
                                               color: Theme.of(context)
-                                                  .colorScheme.secondary),
+                                                  .colorScheme
+                                                  .secondary),
                                         ))),
                               ),
                               Padding(
@@ -313,28 +399,30 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 15, right: 15, left: 15),
+                                padding: EdgeInsets.only(
+                                    top: smallScreen ? 10 : 15,
+                                    right: 15,
+                                    left: 15),
                                 child: Row(
-                                  children: const [
-                                    Expanded(
+                                  children: [
+                                    const Expanded(
                                       child: Divider(
                                         thickness: 1.0,
                                         color: Colors.grey,
                                       ),
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.symmetric(
+                                      padding: const EdgeInsets.symmetric(
                                           horizontal: 10.0),
                                       child: Text(
                                         'Or sign in with',
                                         style: TextStyle(
-                                          fontSize: 16,
+                                          fontSize: smallScreen ? 14 : 16,
                                           color: Colors.grey,
                                         ),
                                       ),
                                     ),
-                                    Expanded(
+                                    const Expanded(
                                       child: Divider(
                                         thickness: 1.0,
                                         color: Colors.grey,
@@ -346,8 +434,10 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                               Expanded(
                                 child: Container(
                                   alignment: Alignment.topCenter,
-                                  padding: const EdgeInsets.only(
-                                      top: 15, right: 15, left: 15),
+                                  padding: EdgeInsets.only(
+                                      top: smallScreen ? 10 : 15,
+                                      right: 15,
+                                      left: 15),
                                   child: Column(
                                     children: [
                                       Row(
@@ -359,12 +449,13 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                                             },
                                             icon: Image.asset(
                                                 'assets/google.png',
-                                                height: 35),
-                                            label: const Text(
+                                                height: smallScreen ? 30 : 35),
+                                            label: Text(
                                               'Google',
                                               style: TextStyle(
                                                   color: Colors.black,
-                                                  fontSize: 16),
+                                                  fontSize:
+                                                      smallScreen ? 14 : 16),
                                             ),
                                             style: ButtonStyle(
                                               overlayColor:
@@ -389,9 +480,8 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                                               elevation: MaterialStateProperty
                                                   .all<double>(0.0),
                                               minimumSize: MaterialStateProperty
-                                                  .all<Size>(
-                                                      const Size.fromHeight(
-                                                          55)),
+                                                  .all<Size>(Size.fromHeight(
+                                                      smallScreen ? 40 : 55)),
                                             ),
                                           )),
                                           const Padding(
@@ -412,12 +502,13 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                                             },
                                             icon: Image.asset(
                                                 'assets/facebook.png',
-                                                height: 35),
-                                            label: const Text(
+                                                height: smallScreen ? 30 : 35),
+                                            label: Text(
                                               'Facebook',
                                               style: TextStyle(
                                                   color: Colors.black,
-                                                  fontSize: 16),
+                                                  fontSize:
+                                                      smallScreen ? 14 : 16),
                                             ),
                                             style: ButtonStyle(
                                               overlayColor:
@@ -442,32 +533,32 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                                               elevation: MaterialStateProperty
                                                   .all<double>(0.0),
                                               minimumSize: MaterialStateProperty
-                                                  .all<Size>(
-                                                      const Size.fromHeight(
-                                                          55)),
+                                                  .all<Size>(Size.fromHeight(
+                                                      smallScreen ? 40 : 55)),
                                             ),
                                           )),
                                         ],
                                       ),
-                                      const SizedBox(
-                                        height: 20,
+                                      SizedBox(
+                                        height: smallScreen ? 10 : 20,
                                       ),
                                       if (_isIphone)
                                         SizedBox(
                                           width: 180,
-                                          height: 54,
+                                          height: smallScreen ? 40 : 54,
                                           child: ElevatedButton.icon(
                                             onPressed: () async {
                                               print('Apple');
                                             },
                                             icon: Image.asset(
                                                 'assets/apple.png',
-                                                height: 35),
-                                            label: const Text(
+                                                height: smallScreen ? 30 : 35),
+                                            label: Text(
                                               'Apple',
                                               style: TextStyle(
                                                   color: Colors.black,
-                                                  fontSize: 16),
+                                                  fontSize:
+                                                      smallScreen ? 14 : 16),
                                             ),
                                             style: ButtonStyle(
                                               overlayColor:
@@ -492,9 +583,8 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                                               elevation: MaterialStateProperty
                                                   .all<double>(0.0),
                                               minimumSize: MaterialStateProperty
-                                                  .all<Size>(
-                                                      const Size.fromHeight(
-                                                          55)),
+                                                  .all<Size>(Size.fromHeight(
+                                                      smallScreen ? 40 : 55)),
                                             ),
                                           ),
                                         ),
@@ -513,9 +603,11 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          const Text(
+                                          Text(
                                             'Don\'t have an account?',
-                                            style: TextStyle(fontSize: 16),
+                                            style: TextStyle(
+                                                fontSize:
+                                                    smallScreen ? 14 : 16),
                                           ),
                                           TextButton(
                                               onPressed: () {
@@ -525,16 +617,19 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
                                                 'Register',
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
-                                                    fontSize: 16,
+                                                    fontSize:
+                                                        smallScreen ? 14 : 16,
                                                     color: Theme.of(context)
-                                                        .colorScheme.secondary),
+                                                        .colorScheme
+                                                        .secondary),
                                               ))
                                         ],
                                       ),
-                                      const Text(
+                                      Text(
                                         '2023 - Copyright - DigiSlips',
                                         style: TextStyle(
-                                            color: Colors.grey, fontSize: 16),
+                                            color: Colors.grey,
+                                            fontSize: smallScreen ? 14 : 16),
                                       ),
                                     ],
                                   ),

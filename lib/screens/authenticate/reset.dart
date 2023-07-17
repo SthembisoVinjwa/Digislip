@@ -27,8 +27,8 @@ class _ResetState extends State<Reset> {
       actions: [
         ElevatedButton(
             style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all<Color>(Theme.of(context).canvasColor)),
+                backgroundColor: MaterialStateProperty.all<Color>(
+                    Theme.of(context).canvasColor)),
             onPressed: () {
               Navigator.of(context).pop();
             },
@@ -48,19 +48,21 @@ class _ResetState extends State<Reset> {
 
   @override
   Widget build(BuildContext context) {
+    final x = MediaQuery.of(context).size.height;
+    final smallScreen = x < 700;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Theme.of(context).canvasColor,
         centerTitle: true,
-        title: Stack(
+        title: const Stack(
           alignment: Alignment.center,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-
+              children: [
                 Icon(Icons.receipt_long, size: 28),
                 SizedBox(width: 2),
                 Text(
@@ -95,46 +97,56 @@ class _ResetState extends State<Reset> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Expanded(
-                flex: 3,
+                flex: smallScreen ? 2 : 3,
                 child: Container(
-                  padding: const EdgeInsets.only(left: 30.0, bottom: 30.0),
+                  padding: EdgeInsets.only(
+                      left: 30.0, bottom: smallScreen ? 10 : 30.0),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: smallScreen
+                        ? MainAxisAlignment.start
+                        : MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Container(
-                          alignment: Alignment.center,
-                          child: const Icon(
-                            Icons.person_2_rounded,
-                            color: Colors.white,
-                            size: 60,
-                          )),
-                      const Text('Reset your password',
+                      if (!smallScreen)
+                        Container(
+                            alignment: Alignment.center,
+                            child: const Icon(
+                              Icons.person_2_rounded,
+                              color: Colors.white,
+                              size: 60,
+                            )),
+                      Text('Reset your password',
                           style: TextStyle(
                               color: Colors.white,
-                              fontSize: 36,
+                              fontSize: smallScreen ? 22 : 32,
                               fontWeight: FontWeight.bold)),
-                      const Text('Use email to change your password',
+                      Text('Use email to change your password',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 16,
+                            fontSize: smallScreen ? 14 : 16,
                           ))
                     ],
                   ),
                 )),
             Expanded(
-                flex: 9,
+                flex: smallScreen ? 12 : 9,
                 child: Form(
                   key: _formKey,
                   child: Container(
                     color: Theme.of(context).cardColor,
-                    padding: const EdgeInsets.only(top: 30.0),
+                    padding: const EdgeInsets.only(top: 10.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Padding(
-                          padding: const EdgeInsets.all(15),
+                          padding: EdgeInsets.only(
+                            left: 15,
+                            right: 15,
+                            top: smallScreen ? 10 : 15,
+                            bottom: smallScreen ? 10 : 15,
+                          ),
                           child: TextFormField(
+                            style: TextStyle(fontSize: smallScreen ? 14 : 16),
                             validator: (val) {
                               if (val!.isEmpty) {
                                 return 'Email cannot be empty.';
@@ -150,17 +162,28 @@ class _ResetState extends State<Reset> {
                             },
                             controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              floatingLabelBehavior:
-                                  FloatingLabelBehavior.always,
-                              labelText: 'Email',
-                              hintText: 'Enter your email',
-                            ),
+                            decoration: smallScreen
+                                ? const InputDecoration(
+                                    isDense: true,
+                                    contentPadding:
+                                        EdgeInsets.fromLTRB(20, 20, 20, 3),
+                                    border: OutlineInputBorder(),
+                                    floatingLabelBehavior:
+                                        FloatingLabelBehavior.always,
+                                    labelText: 'Email',
+                                    hintText: 'Enter your email',
+                                  )
+                                : const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    floatingLabelBehavior:
+                                        FloatingLabelBehavior.always,
+                                    labelText: 'Email',
+                                    hintText: 'Enter your email',
+                                  ),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 15),
+                          padding: const EdgeInsets.only(top: 10),
                           child: MainButton(
                             onTap: () async {
                               if (_formKey.currentState!.validate()) {
@@ -189,10 +212,10 @@ class _ResetState extends State<Reset> {
                           child: Container(
                             padding: const EdgeInsets.only(bottom: 10),
                             alignment: Alignment.bottomCenter,
-                            child: const Text(
+                            child: Text(
                               '2023 - Copyright - DigiSlips',
-                              style: TextStyle(
-                                  color: Colors.grey, fontSize: 16),
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: smallScreen ? 14 : 16),
                             ),
                           ),
                         ),

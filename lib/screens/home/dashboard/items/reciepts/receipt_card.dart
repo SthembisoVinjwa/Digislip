@@ -5,14 +5,17 @@ class ReceiptCard extends StatefulWidget {
   final List<Map<String, String>> receiptLines;
   final Function previous;
 
-  ReceiptCard({required this.receipt, required this.receiptLines, required this.previous});
+  ReceiptCard(
+      {required this.receipt,
+      required this.receiptLines,
+      required this.previous});
 
   @override
   State<ReceiptCard> createState() => _ReceiptCardState();
 }
 
 class _ReceiptCardState extends State<ReceiptCard> {
-  double tax = 0.0;
+  double tax = 0.15;
 
   double calculateSubtotal() {
     double subtotal = 0;
@@ -26,7 +29,7 @@ class _ReceiptCardState extends State<ReceiptCard> {
 
   double calculateTotal() {
     double subtotal = calculateSubtotal();
-    double total = subtotal + tax;
+    double total = subtotal + subtotal * tax;
     return total;
   }
 
@@ -39,228 +42,165 @@ class _ReceiptCardState extends State<ReceiptCard> {
     });
 
     final receiptNumber = widget.receipt['Receiptnumber'] ?? '';
-    final formattedReceiptNumber =
-    receiptNumber.contains('.') ? receiptNumber.split('.').first : receiptNumber;
+    final formattedReceiptNumber = receiptNumber.contains('.')
+        ? receiptNumber.split('.').first
+        : receiptNumber;
 
-    return SingleChildScrollView(
-      child: Card(
-        elevation: 0,
-        margin: const EdgeInsets.only(top: 15),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.only(
-                    left: 15,
-                    right: 15,
-                    bottom: 15),
-                child: Card(
-                  color: Theme.of(context).primaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius:
-                    BorderRadius.circular(8.0),
-                  ),
-                  child: ListTile(
-                    title: Text(
-                      widget.receipt['Storename'] ??
-                          '',
-                      style: TextStyle(
-                          color: Theme.of(context)
-                              .cardColor,
-                          fontSize: 16),
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 10.0, top: 10),
+        child: SingleChildScrollView(
+          child: Card(
+            elevation: 0,
+            margin: const EdgeInsets.only(top: 0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding:
+                        const EdgeInsets.only(left: 9, right: 9, bottom: 15),
+                    child: Card(
+                      color: Theme.of(context).primaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: ListTile(
+                        title: Text(
+                          '${widget.receipt['Merchantname']} - ${widget.receipt['Storename']}',
+                          style: TextStyle(
+                              color: Theme.of(context).cardColor, fontSize: 16),
+                        ),
+                        subtitle: Text(
+                          '${widget.receipt['Receiptdate']} @ ${widget.receipt['Receipttime']}',
+                          style: TextStyle(
+                              color: Theme.of(context).cardColor, fontSize: 12),
+                        ),
+                        trailing: IconButton(
+                            onPressed: () {
+                              widget.previous();
+                            },
+                            icon: Icon(Icons.cancel_rounded,
+                                size: 30, color: Theme.of(context).cardColor)),
+                        // Customize the UI for each receipt item as needed
+                      ),
                     ),
-                    subtitle: Text(
-                      widget.receipt['Receiptdate'] ??
-                          '',
-                      style: TextStyle(
-                          color: Theme.of(context)
-                              .cardColor,
-                          fontSize: 12),
-                    ),
-                    trailing: IconButton(
-                        onPressed: () {
-                          widget.previous();
-                        },
-                        icon: Icon(Icons.cancel_rounded,
-                            size: 30,
-                            color: Theme.of(context)
-                                .cardColor)),
-                    // Customize the UI for each receipt item as needed
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0)),
-                  child: Container(
-                    height: 73,
-                    padding: const EdgeInsets.all(15.0),
-                    color: Theme.of(context).primaryColor,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12, right: 12),
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(8.0),
+                        topRight: Radius.circular(8.0),
+                      ),
+                      child: Container(
+                        height: 70,
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
+                        color: Theme.of(context).primaryColor,
+                        child: Row(
+                          children: [
+                            Flexible(
+                              child: Text(
+                                'Receipt# $formattedReceiptNumber',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                                softWrap: true,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 18, right: 18, top: 5, bottom: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          children: widget.receiptLines.map((line) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 8),
+                                Row(
+                                  children: [
+                                    Text(
+                                        '${line['Qty']} x ${line['Description']}'),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text('\$${line['Amount']}'),
+                                  ],
+                                ),
+                              ],
+                            );
+                          }).toList(),
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
                           children: [
-                            Row(
-                              children: [
-                                Text(
-                                  'Receipt# ',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).cardColor,
-                                  ),
-                                ),
-                                Text(
-                                  formattedReceiptNumber,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Theme.of(context).cardColor,
-                                  ),
-                                ),
-                              ],
+                            const Text(
+                              'Subtotal: ',
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
-                            const SizedBox(height: 4),
-                            Row(
-                              children: [
-                                Text(
-                                  'Date ',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).cardColor,
-                                  ),
-                                ),
-                                Text(
-                                  '${widget.receipt['Receiptdate']}',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Theme.of(context).cardColor,
-                                  ),
-                                ),
-                              ],
+                            const Spacer(),
+                            Text(
+                              '\$${calculateSubtotal().toStringAsFixed(2)}',
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          children: [
+                            const Text(
+                              'Tax: ',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const Spacer(),
+                            Text(
+                              '\$${(calculateSubtotal() * 0.15).toStringAsFixed(2)}',
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          children: [
+                            const Text(
+                              'Total: ',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const Spacer(),
+                            Text(
+                              '\$${calculateTotal().toStringAsFixed(2)}',
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
                       ],
                     ),
                   ),
-                ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 25, right: 25, top: 20, bottom: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Store Name: ${widget.receipt['Storename']}',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: widget.receiptLines.map((line) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 8),
-                            Row(
-                              children: [
-                                const Text(
-                                  'Amount: ',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                const Spacer(),
-                                Text('${line['Amount']}'),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                const Text(
-                                  'Description: ',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                const Spacer(),
-                                Text('${line['Description']}'),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                const Text(
-                                  'Line Number: ',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                const Spacer(),
-                                Text('${line['Linenumber']}'),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                const Text(
-                                  'Quantity: ',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                const Spacer(),
-                                Text('${line['Qty']}'),
-                              ],
-                            ),
-                          ],
-                        );
-                      }).toList(),
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        const Text(
-                          'Subtotal: ',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        const Spacer(),
-                        Text(
-                          calculateSubtotal().toStringAsFixed(2),
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 5,),
-                    Row(
-                      children: [
-                        const Text(
-                          'Tax: ',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        const Spacer(),
-                        Text(
-                          '$tax',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 5,),
-                    Row(
-                      children: [
-                        const Text(
-                          'Total: ',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        const Spacer(),
-                        Text(
-                          calculateTotal().toStringAsFixed(2),
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),

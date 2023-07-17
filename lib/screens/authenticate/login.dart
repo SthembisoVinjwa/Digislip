@@ -116,12 +116,12 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
               elevation: 0,
               backgroundColor: Theme.of(context).canvasColor,
               centerTitle: true,
-              title: Stack(
+              title: const Stack(
                 alignment: Alignment.center,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       SizedBox(width: 20),
                       Icon(Icons.receipt_long, size: 28),
                       SizedBox(width: 2),

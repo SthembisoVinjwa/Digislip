@@ -69,9 +69,11 @@ class DatabaseService {
         final receiptData = {
           'Data': _getFieldValue(doc, 'Data'),
           'Receiptdate': _getFieldValue(doc, 'Receiptdate'),
+          'Receipttime': _getFieldValue(doc, 'Receipttime'),
           'Receiptnumber': _getFieldValue(doc, 'Receiptnumber'),
           'Source': _getFieldValue(doc, 'Source'),
           'Merchantid': _getFieldValue(doc, 'Merchantid'),
+          'Merchantname': _getFieldValue(doc, 'Merchantname'),
           'Storename': _getFieldValue(doc, 'Storename'),
           'Receiptid': doc.id.toString(),
           'Type': _getFieldValue(doc, 'Type'),
@@ -93,10 +95,13 @@ class DatabaseService {
           'Expirydate': _getFieldValue(doc, 'Expirydate'),
           'Isused': _getFieldValue(doc, 'Isused'),
           'Merchantid': _getFieldValue(doc, 'Merchantid'),
+          'Merchantname': _getFieldValue(doc, 'Merchantname'),
+          'Storename': _getFieldValue(doc, 'Storename'),
           'Terms': _getFieldValue(doc, 'Terms'),
           'Type': _getFieldValue(doc, 'Type'),
           'Useddate': _getFieldValue(doc, 'Useddate'),
           'Voucherdate': _getFieldValue(doc, 'Voucherdate'),
+          'Vouchertime': _getFieldValue(doc, 'Vouchertime'),
           'Vouchernumber': _getFieldValue(doc, 'Vouchernumber'),
         };
         return voucherData;

@@ -63,7 +63,7 @@ class _HomeState extends State<Home> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(left: 17.0, right: 17.0, bottom: 17.0),
         child: Container(
-          height: 60,
+          height: 70,
           decoration: BoxDecoration(
             color: Theme.of(context).primaryColor,
             borderRadius: BorderRadius.circular(8),
@@ -89,7 +89,7 @@ class _HomeState extends State<Home> {
               labelBehavior:
               NavigationDestinationLabelBehavior.onlyShowSelected,
               animationDuration: const Duration(seconds: 2),
-              height: 60,
+              height: 70,
               selectedIndex: navIndex,
               onDestinationSelected: (index) =>
                   toPage(index),

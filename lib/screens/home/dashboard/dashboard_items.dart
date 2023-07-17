@@ -18,9 +18,6 @@ class _DashboardItemsState extends State<DashboardItems> {
         Icons.receipt_long_rounded),
     ItemModel("Upload",
         Icons.cloud_upload_rounded),
-    ItemModel(
-        "Codes",
-         Icons.qr_code_scanner_rounded),
     ItemModel("Vouchers",
         Icons.local_offer_rounded),
   ];
@@ -118,8 +115,10 @@ class _DashboardItemsState extends State<DashboardItems> {
   }
 
   Widget _DashboardList() {
+    final x = MediaQuery.of(context).size.height;
+    print(x);
     return ListView.builder(
-      padding: const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 0),
+      padding: EdgeInsets.only(left: 15, right: 15, top: x > 805? 24 : 15, bottom: 0),
       itemCount: items.length,
       itemBuilder: (context, index) {
         var item = items.elementAt(index);
@@ -130,10 +129,8 @@ class _DashboardItemsState extends State<DashboardItems> {
 
   @override
   Widget build(BuildContext context) {
-    final x = MediaQuery.of(context).size.height;
     return Container(
       color: Theme.of(context).cardColor,
-      padding: EdgeInsets.only(top: x > 806? 20 : 0),
       child: _DashboardList(),
     );
   }

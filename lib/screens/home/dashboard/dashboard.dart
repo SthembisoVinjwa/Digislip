@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 class Dashboard extends StatefulWidget {
   final Function toPage;
+
   const Dashboard({Key? key, required this.toPage}) : super(key: key);
 
   @override
@@ -15,6 +16,7 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   final AuthService _auth = AuthService();
+  bool barcode = true;
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +31,9 @@ class _DashboardState extends State<Dashboard> {
         title: Stack(
           alignment: Alignment.center,
           children: [
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Icon(Icons.receipt_long, size: 28),
                 SizedBox(width: 2),
                 Text(
@@ -60,7 +62,8 @@ class _DashboardState extends State<Dashboard> {
         ),
       ),
       body: Container(
-        padding: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 5.0, top: 5.0),
+        padding:
+            const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 5.0, top: 5.0),
         alignment: Alignment.center,
         child: Card(
           elevation: 5.0,
@@ -73,29 +76,44 @@ class _DashboardState extends State<Dashboard> {
             padding: const EdgeInsets.all(20.0),
             child: Column(
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: Container(
-                    padding: const EdgeInsets.all(15),
-                    color: Theme.of(context).cardColor,
-                    height: 200,
-                    child: BarcodeWidget(
-                      backgroundColor: Theme.of(context).cardColor,
-                      barcode: Barcode.code128(),
-                      data: user!.uid,
-                      drawText: false,
+                Expanded(
+                  flex: 10,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          barcode = !barcode;
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(15),
+                        color: Theme.of(context).cardColor,
+                        height: 200,
+                        child: BarcodeWidget(
+                          backgroundColor: Theme.of(context).cardColor,
+                          barcode: barcode? Barcode.code128() : Barcode.qrCode(),
+                          data: user!.uid,
+                          drawText: false,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-                Flexible(
+                Expanded(flex: 1, child: Container()),
+                Expanded(
+                  flex: 14,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 20),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
-                      child: DashboardItems(toPage: widget.toPage,),
+                      child: DashboardItems(
+                        toPage: widget.toPage,
+                      ),
                     ),
                   ),
                 ),
+                Expanded(flex: 1, child: Container()),
               ],
             ),
           ),

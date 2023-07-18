@@ -23,9 +23,9 @@ class _AboutState extends State<About> {
         title: Stack(
           alignment: Alignment.center,
           children: [
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Icon(Icons.receipt_long, size: 28),
                 SizedBox(width: 2),
                 Text(
@@ -73,7 +73,7 @@ class _AboutState extends State<About> {
                     child: Container(
                       alignment: Alignment.topCenter,
                       color: Theme.of(context).cardColor,
-                      padding: EdgeInsets.all(15),
+                      padding: const EdgeInsets.all(15),
                       child: Column(
                         children: [
                           Row(
@@ -110,8 +110,8 @@ class _AboutState extends State<About> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 16,),
-                          Text(
+                          const SizedBox(height: 16,),
+                          const Text(
                             'Welcome to DigiSlips, your digital receipt management app. '
                                 'Keep track of your receipts, store them securely, and access them anytime, anywhere. '
                                 'We are committed to providing a seamless and convenient experience for managing your receipts. '
@@ -119,8 +119,8 @@ class _AboutState extends State<About> {
                             style: TextStyle(fontSize: 14),
                             textAlign: TextAlign.center,
                           ),
-                          Spacer(),
-                          Text(
+                          const Spacer(),
+                          const Text(
                             '2023 - Copyright - DigiSlips',
                             style: TextStyle(
                                 color: Colors.grey, fontSize: 16),

@@ -31,7 +31,7 @@ class _DashboardItemsState extends State<DashboardItems> {
             Icon(item.Icon, color: Theme.of(context).cardColor),
           ],
         ),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         Expanded(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -116,7 +116,6 @@ class _DashboardItemsState extends State<DashboardItems> {
 
   Widget _DashboardList() {
     final x = MediaQuery.of(context).size.height;
-    print(x);
     return ListView.builder(
       padding: EdgeInsets.only(left: 15, right: 15, top: x > 805? 24 : 15, bottom: 0),
       itemCount: items.length,

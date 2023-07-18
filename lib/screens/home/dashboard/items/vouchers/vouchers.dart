@@ -154,15 +154,21 @@ class _VouchersState extends State<Vouchers> {
                                     ),
                                     child: ListTile(
                                       title: Text(
-                                        selectedVoucher!['Details'] ?? '',
+                                        selectedVoucher!['Storename']!.isEmpty
+                                            ? selectedVoucher!['Merchantname']!
+                                            : '${selectedVoucher!['Merchantname']} - ${selectedVoucher!['Storename']}',
                                         style: TextStyle(
-                                            color: Theme.of(context).cardColor,
+                                            color:
+                                            Theme.of(context).cardColor,
                                             fontSize: 16),
                                       ),
                                       subtitle: Text(
-                                        selectedVoucher!['Voucherdate'] ?? '',
+                                        selectedVoucher!['Vouchertime']!.isEmpty
+                                            ? selectedVoucher!['Voucherdate']!
+                                            : '${selectedVoucher!['Voucherdate']} @ ${selectedVoucher!['Vouchertime']}',
                                         style: TextStyle(
-                                            color: Theme.of(context).cardColor,
+                                            color:
+                                            Theme.of(context).cardColor,
                                             fontSize: 12),
                                       ),
                                       trailing: IconButton(
@@ -273,6 +279,10 @@ class _VouchersState extends State<Vouchers> {
                                 } else if (dateA.isBefore(dateB)) {
                                   return 1; // a is before b
                                 } else {
+                                  if (a['Vouchertime']!.isEmpty) {
+                                    return 0;
+                                  }
+
                                   TimeOfDay timeA = TimeOfDay.fromDateTime(DateFormat('HH:mm').parse(a['Vouchertime']!));
                                   TimeOfDay timeB = TimeOfDay.fromDateTime(DateFormat('HH:mm').parse(b['Vouchertime']!));
 
@@ -301,6 +311,10 @@ class _VouchersState extends State<Vouchers> {
                                 } else if (dateA.isBefore(dateB)) {
                                   return -1; // a is before b (reverse order)
                                 } else {
+                                  if (a['Vouchertime']!.isEmpty) {
+                                    return 0;
+                                  }
+
                                   TimeOfDay timeA = TimeOfDay.fromDateTime(DateFormat('HH:mm').parse(a['Vouchertime']!));
                                   TimeOfDay timeB = TimeOfDay.fromDateTime(DateFormat('HH:mm').parse(b['Vouchertime']!));
 
@@ -343,17 +357,21 @@ class _VouchersState extends State<Vouchers> {
                                       ),
                                       child: ListTile(
                                         title: Text(
-                                          '${voucher['Merchantname']} - ${voucher['Storename']}',
+                                          voucher['Storename']!.isEmpty
+                                              ? voucher['Merchantname']!
+                                              : '${voucher['Merchantname']} - ${voucher['Storename']}',
                                           style: TextStyle(
                                               color:
-                                                  Theme.of(context).cardColor,
+                                              Theme.of(context).cardColor,
                                               fontSize: 16),
                                         ),
                                         subtitle: Text(
-                                          '${voucher['Voucherdate']} @ ${voucher['Vouchertime']}',
+                                          voucher['Vouchertime']!.isEmpty
+                                              ? voucher['Voucherdate']!
+                                              : '${voucher['Voucherdate']} @ ${voucher['Vouchertime']}',
                                           style: TextStyle(
                                               color:
-                                                  Theme.of(context).cardColor,
+                                              Theme.of(context).cardColor,
                                               fontSize: 12),
                                         ),
                                         trailing: Icon(
@@ -383,10 +401,10 @@ class _VouchersState extends State<Vouchers> {
                               ],
                             );
                           } else {
-                            return Center(
+                            return const Center(
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
-                                children: const [
+                                children: [
                                   Loading(
                                     message: 'Loading Vouchers...',
                                   ),

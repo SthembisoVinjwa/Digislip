@@ -6,8 +6,8 @@ class MainProvider with ChangeNotifier {
 
   bool get isSubscribed => _subscribed;
 
-  void updateSubscription(bool subscrition) {
-    _subscribed = subscrition;
+  void updateSubscription(bool subscription) {
+    _subscribed = subscription;
     notifyListeners();
   }
 }

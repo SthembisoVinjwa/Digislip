@@ -4,6 +4,7 @@ import 'package:digislip/models/user.dart';
 import 'package:digislip/screens/authenticate/auth_loading.dart';
 import 'package:digislip/screens/authenticate/reset.dart';
 import 'package:digislip/services/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -59,47 +60,41 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
   }
 
   Future<void> signInWithEmail(String email, String password) async {
-    try {
-      setState(() {
-        loading = true;
-      });
-      dynamic result = await _auth.SignInEmailAndPassword(email, password);
-      if (result == null) {
-        setState(() {
-          loading = false;
-          error = 'User does not exist.';
-          showMessage(error, 'Not found');
-        });
-      }
-    } catch (e) {
-      print(e);
+    setState(() {
+      loading = true;
+    });
+    dynamic result = await _auth.SignInEmailAndPassword(email, password);
+
+    if (mounted) {
       setState(() {
         loading = false;
-        error = 'User does not exist.';
-        showMessage(error, 'Not found');
+        if (result.runtimeType == FirebaseAuthException) {
+          error = result.message;
+          showMessage(
+              error,
+              result.code.toString()[0].toUpperCase() +
+                  result.code.toString().substring(1));
+        }
       });
     }
   }
 
   Future<void> signInWithGoogle() async {
-    try {
+    setState(() {
+      loading = true;
+    });
+    dynamic result = await _auth.signInWithGoogle();
+
+    if (mounted) {
       setState(() {
-        loading = true;
-      });
-      dynamic result = await _auth.signInWithGoogle();
-      if (result == null) {
-        setState(() {
-          loading = false;
-          error = 'Could not sign in with Google.';
-          showMessage(error, 'Google Sign in');
-        });
-      }
-    } catch (e) {
-      print(e);
-      setState(() {
-        loading = true;
-        error = 'Could not sign in with Google.';
-        showMessage(error, 'Google Sign in');
+        loading = false;
+        if (result.runtimeType == FirebaseAuthException) {
+          error = result.message;
+          showMessage(
+              error,
+              result.code.toString()[0].toUpperCase() +
+                  result.code.toString().substring(1));
+        }
       });
     }
   }
@@ -107,7 +102,6 @@ class _LoginState extends State<Login> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<CustomUser?>(context);
-
     final x = MediaQuery.of(context).size.height;
     final smallScreen = x < 700;
 

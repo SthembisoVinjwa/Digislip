@@ -17,7 +17,7 @@ class Loading extends StatelessWidget {
               color: Theme.of(context).primaryColor,
               size: 54.0,
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             Text(
               message,
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),

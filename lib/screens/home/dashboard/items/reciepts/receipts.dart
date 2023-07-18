@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import 'fullscreen.dart';
+
 class Receipts extends StatefulWidget {
   final Function toPage;
 
@@ -126,12 +128,16 @@ class _ReceiptsState extends State<Receipts> {
                                 });
                               },
                               icon: Icon(
-                                sortDescending? Icons.arrow_circle_up_rounded : Icons.arrow_circle_down_rounded,
+                                sortDescending
+                                    ? Icons.arrow_circle_up_rounded
+                                    : Icons.arrow_circle_down_rounded,
                                 color: Theme.of(context).primaryColor,
                                 size: 29,
                               ),
                             ),
-                            SizedBox(width: 8,),
+                            const SizedBox(
+                              width: 8,
+                            ),
                           ],
                         ),
                       ],
@@ -144,31 +150,29 @@ class _ReceiptsState extends State<Receipts> {
                               children: [
                                 Container(
                                   padding: const EdgeInsets.only(
-                                      left: 15,
-                                      right: 15,
-                                      bottom: 10,
-                                      top: 15),
+                                      left: 15, right: 15, bottom: 10, top: 15),
                                   child: Card(
                                     color: Theme.of(context).primaryColor,
                                     shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(8.0),
+                                      borderRadius: BorderRadius.circular(8.0),
                                     ),
                                     child: ListTile(
                                       title: Text(
-                                        selectedReceipt!['Storename'] ??
-                                            '',
+                                        selectedReceipt!['Storename']!.isEmpty
+                                            ? selectedReceipt!['Merchantname']!
+                                            : '${selectedReceipt!['Merchantname']} - ${selectedReceipt!['Storename']}',
                                         style: TextStyle(
-                                            color: Theme.of(context)
-                                                .cardColor,
+                                            color:
+                                            Theme.of(context).cardColor,
                                             fontSize: 16),
                                       ),
                                       subtitle: Text(
-                                        selectedReceipt!['Receiptdate'] ??
-                                            '',
+                                        selectedReceipt!['Receipttime']!.isEmpty
+                                            ? selectedReceipt!['Receiptdate']!
+                                            : '${selectedReceipt!['Receiptdate']} @ ${selectedReceipt!['Receipttime']}',
                                         style: TextStyle(
-                                            color: Theme.of(context)
-                                                .cardColor,
+                                            color:
+                                            Theme.of(context).cardColor,
                                             fontSize: 12),
                                       ),
                                       trailing: IconButton(
@@ -177,110 +181,131 @@ class _ReceiptsState extends State<Receipts> {
                                           },
                                           icon: Icon(Icons.cancel_rounded,
                                               size: 30,
-                                              color: Theme.of(context)
-                                                  .cardColor)),
+                                              color:
+                                                  Theme.of(context).cardColor)),
                                       // Customize the UI for each receipt item as needed
                                     ),
                                   ),
                                 ),
-                                Container(
-                                  child: FutureBuilder<String>(
-                                    future: DatabaseService(
-                                            uid: user!.uid,
-                                            email: user.email!)
-                                        .getReceiptImage(
-                                            selectedReceipt!['Data'] ??
-                                                ''),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.hasData) {
-                                        return Container(
-                                          height: 385,
-                                          padding: const EdgeInsets.only(
-                                              top: 5),
+                                FutureBuilder<String>(
+                                  future: DatabaseService(
+                                          uid: user!.uid, email: user.email!)
+                                      .getReceiptImage(
+                                          selectedReceipt!['Data'] ?? ''),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          // Navigate to a new screen to display the image in full screen
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  FullScreenImage(
+                                                      imageUrl: snapshot.data!),
+                                            ),
+                                          );
+                                        },
+                                        child: Container(
+                                          height: 405,
+                                          padding:
+                                              const EdgeInsets.only(top: 5),
                                           child: ClipRRect(
                                             borderRadius:
-                                                BorderRadius.circular(
-                                                    8.0),
+                                                BorderRadius.circular(8.0),
                                             child: Image.network(
                                               snapshot.data!,
                                             ),
                                           ),
-                                        );
-                                      } else if (snapshot.hasError) {
-                                        return const Text(
-                                            'Error loading receipt image');
-                                      } else {
-                                        return const Expanded(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            mainAxisSize:
-                                                MainAxisSize.min,
-                                            children: [
-                                              Loading(message: 'Loading Receipt...',), // Loading indicator widget
-                                              SizedBox(height: 60),
-                                            ],
-                                          ),
-                                        );
-                                      }
-                                    },
-                                  ),
+                                        ),
+                                      );
+                                    } else if (snapshot.hasError) {
+                                      return const Text(
+                                          'Error loading receipt image');
+                                    } else {
+                                      return const Expanded(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Loading(
+                                                message: 'Loading Receipt...'),
+                                            // Loading indicator widget
+                                            SizedBox(height: 60),
+                                          ],
+                                        ),
+                                      );
+                                    }
+                                  },
                                 )
                               ],
                             ),
                           )
                         : FutureBuilder<List<Map<String, String>>>(
-                          future: DatabaseService(
-                                  uid: user!.uid,
-                                  email: user.email!)
-                              .getLines(selectedReceipt!['Receiptid']!),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return ReceiptCard(receiptLines: snapshot.data!, receipt: selectedReceipt!, previous: toReceiptList,);
-                            } else if (snapshot.hasError) {
-                              return Text(
-                                  snapshot.error.toString());
-                            } else {
-                              return const Expanded(
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.center,
-                                  mainAxisSize:
-                                      MainAxisSize.min,
-                                  children: [
-                                    Loading(message: 'Loading Receipt...',), // Loading indicator widget
-                                    SizedBox(height: 60),
-                                  ],
-                                ),
-                              );
-                            }
-                          },
-                        )
+                            future: DatabaseService(
+                                    uid: user!.uid, email: user.email!)
+                                .getLines(selectedReceipt!['Receiptid']!),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return ReceiptCard(
+                                  receiptLines: snapshot.data!,
+                                  receipt: selectedReceipt!,
+                                  previous: toReceiptList,
+                                );
+                              } else if (snapshot.hasError) {
+                                return Text(snapshot.error.toString());
+                              } else {
+                                return const Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Loading(
+                                        message: 'Loading Receipt...',
+                                      ),
+                                      // Loading indicator widget
+                                      SizedBox(height: 60),
+                                    ],
+                                  ),
+                                );
+                              }
+                            },
+                          )
                     : Expanded(
                         child: StreamBuilder<List<Map<String, String>>>(
-                        stream: DatabaseService(
-                                uid: user!.uid, email: user.email!)
-                            .getReceipts(),
+                        stream:
+                            DatabaseService(uid: user!.uid, email: user.email!)
+                                .getReceipts(),
                         builder: (context, snapshot) {
-                          if (snapshot.hasData &&
-                              snapshot.data!.isNotEmpty) {
+                          if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                             final List<Map<String, String>> receipts =
                                 snapshot.data!;
                             if (!isSubscribed) {
-                              receipts.removeWhere((receipt) => receipt['Type'] == 'Upload');
+                              receipts.removeWhere(
+                                  (receipt) => receipt['Type'] == 'Upload');
                             }
                             if (sortDescending) {
                               receipts.sort((a, b) {
-                                DateTime dateA = DateFormat('dd/MM/yyyy').parse(a['Receiptdate']!);
-                                DateTime dateB = DateFormat('dd/MM/yyyy').parse(b['Receiptdate']!);
+                                DateTime dateA = DateFormat('dd/MM/yyyy')
+                                    .parse(a['Receiptdate']!);
+                                DateTime dateB = DateFormat('dd/MM/yyyy')
+                                    .parse(b['Receiptdate']!);
 
                                 if (dateB.isBefore(dateA)) {
                                   return -1; // b is before a
                                 } else if (dateA.isBefore(dateB)) {
                                   return 1; // a is before b
                                 } else {
-                                  TimeOfDay timeA = TimeOfDay.fromDateTime(DateFormat('HH:mm').parse(a['Receipttime']!));
-                                  TimeOfDay timeB = TimeOfDay.fromDateTime(DateFormat('HH:mm').parse(b['Receipttime']!));
+                                  if (a['Receipttime']!.isEmpty) {
+                                    return 0;
+                                  }
+                                  TimeOfDay timeA = TimeOfDay.fromDateTime(
+                                      DateFormat('HH:mm')
+                                          .parse(a['Receipttime']!));
+                                  TimeOfDay timeB = TimeOfDay.fromDateTime(
+                                      DateFormat('HH:mm')
+                                          .parse(b['Receipttime']!));
 
                                   if (timeB.hour < timeA.hour) {
                                     return -1; // b is before a
@@ -299,16 +324,25 @@ class _ReceiptsState extends State<Receipts> {
                               });
                             } else {
                               receipts.sort((a, b) {
-                                DateTime dateA = DateFormat('dd/MM/yyyy').parse(a['Receiptdate']!);
-                                DateTime dateB = DateFormat('dd/MM/yyyy').parse(b['Receiptdate']!);
+                                DateTime dateA = DateFormat('dd/MM/yyyy')
+                                    .parse(a['Receiptdate']!);
+                                DateTime dateB = DateFormat('dd/MM/yyyy')
+                                    .parse(b['Receiptdate']!);
 
                                 if (dateB.isBefore(dateA)) {
                                   return 1; // b is before a (reverse order)
                                 } else if (dateA.isBefore(dateB)) {
                                   return -1; // a is before b (reverse order)
                                 } else {
-                                  TimeOfDay timeA = TimeOfDay.fromDateTime(DateFormat('HH:mm').parse(a['Receipttime']!));
-                                  TimeOfDay timeB = TimeOfDay.fromDateTime(DateFormat('HH:mm').parse(b['Receipttime']!));
+                                  if (a['Receipttime']!.isEmpty) {
+                                    return 0;
+                                  }
+                                  TimeOfDay timeA = TimeOfDay.fromDateTime(
+                                      DateFormat('HH:mm')
+                                          .parse(a['Receipttime']!));
+                                  TimeOfDay timeB = TimeOfDay.fromDateTime(
+                                      DateFormat('HH:mm')
+                                          .parse(b['Receipttime']!));
 
                                   if (timeB.hour < timeA.hour) {
                                     return 1; // b is before a (reverse order)
@@ -341,32 +375,33 @@ class _ReceiptsState extends State<Receipts> {
                                       });
                                     },
                                     child: Card(
-                                      color:
-                                          Theme.of(context).primaryColor,
+                                      color: Theme.of(context).primaryColor,
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(8.0),
                                       ),
                                       child: ListTile(
                                         title: Text(
-                                          '${receipt['Merchantname']} - ${receipt['Storename']}',
+                                          receipt['Storename']!.isEmpty
+                                              ? receipt['Merchantname']!
+                                              : '${receipt['Merchantname']} - ${receipt['Storename']}',
                                           style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .cardColor,
+                                              color:
+                                                  Theme.of(context).cardColor,
                                               fontSize: 16),
                                         ),
                                         subtitle: Text(
-                                          '${receipt['Receiptdate']} @ ${receipt['Receipttime']}',
+                                          receipt['Receipttime']!.isEmpty
+                                              ? receipt['Receiptdate']!
+                                              : '${receipt['Receiptdate']} @ ${receipt['Receipttime']}',
                                           style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .cardColor,
+                                              color:
+                                                  Theme.of(context).cardColor,
                                               fontSize: 12),
                                         ),
                                         trailing: Icon(
-                                            Icons
-                                                .arrow_forward_ios_rounded,
-                                            color: Theme.of(context)
-                                                .cardColor),
+                                            Icons.arrow_forward_ios_rounded,
+                                            color: Theme.of(context).cardColor),
                                         // Customize the UI for each receipt item as needed
                                       ),
                                     ),
@@ -382,8 +417,7 @@ class _ReceiptsState extends State<Receipts> {
                                 Text(
                                   'No Receipts',
                                   style: TextStyle(
-                                      color:
-                                          Theme.of(context).primaryColor,
+                                      color: Theme.of(context).primaryColor,
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -397,7 +431,9 @@ class _ReceiptsState extends State<Receipts> {
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Loading(message: 'Loading Receipts...',),
+                                  Loading(
+                                    message: 'Loading Receipts...',
+                                  ),
                                 ],
                               ),
                             );

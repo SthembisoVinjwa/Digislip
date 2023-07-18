@@ -29,9 +29,9 @@ class _AccountState extends State<Account> {
         title: Stack(
           alignment: Alignment.center,
           children: [
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Icon(Icons.receipt_long, size: 28),
                 SizedBox(width: 2),
                 Text(

@@ -114,9 +114,9 @@ class _UploadState extends State<Upload> {
         title: Stack(
           alignment: Alignment.center,
           children: [
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Icon(Icons.receipt_long, size: 28),
                 SizedBox(width: 2),
                 Text(
@@ -148,260 +148,257 @@ class _UploadState extends State<Upload> {
         padding:
             const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 5.0, top: 5.0),
         alignment: Alignment.center,
-        child: Card(
-          elevation: 5.0,
-          color: Theme.of(context).primaryColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          margin: const EdgeInsets.all(12),
-          child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: Container(
-                  color: Theme.of(context).cardColor,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 15.0),
-                        child: Row(
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                widget.toPage(1);
-                              },
-                              icon: Icon(
-                                Icons.arrow_back,
-                                color: Theme.of(context).primaryColor,
-                              ),
-                            ),
-                            Expanded(
-                              child: Center(
-                                child: Text(
-                                  'Add Receipt',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                      color: Theme.of(context).primaryColor),
-                                ),
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                // Just for padding
-                              },
-                              icon: Icon(
-                                Icons.arrow_back,
-                                color: Theme.of(context).cardColor,
-                              ),
-                            ),
-                          ],
-                        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8.0),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5.0),
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        widget.toPage(1);
+                      },
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: Theme.of(context).primaryColor,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: Container(
-                            padding: const EdgeInsets.all(20.0),
-                            color: Theme.of(context).primaryColor,
-                            height: 150,
-                            child: Column(
-                              children: [
-                                DropdownButtonFormField<String>(
-                                  dropdownColor: Theme.of(context).primaryColor,
-                                  decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(5),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
-                                          width: 3.0),
-                                    ),
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Theme.of(context)
-                                              .cardColor,
-                                          width: 3.0),
-                                    ),
-                                  ),
-                                  items: merchants,
-                                  iconEnabledColor: Theme.of(context).cardColor,
-                                  style: TextStyle(
-                                    color: Theme.of(context).cardColor,
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  value: _dropdownValue.isEmpty
-                                      ? null
-                                      : _dropdownValue,
-                                  hint: Text(
-                                    'Select Merchant',
-                                    style: TextStyle(
-                                      color: Theme.of(context).cardColor,
-                                    ),
-                                  ),
-                                  onChanged: (String? value) {
-                                    if (value is String) {
-                                      setState(() {
-                                        _dropdownValue = value;
-                                      });
-                                    }
-                                  },
-                                ),
-                                const SizedBox(
-                                  height: 14,
-                                ),
-                                TextFormField(
-                                  decoration: InputDecoration(
-                                    hintText: 'Date: dd/mm/yyyy',
-                                    fillColor: Theme.of(context).cardColor,
-                                    filled: true,
-                                  ),
-                                  controller: dateController,
-                                  onTap: () async {
-                                    DateTime? selectedDate =
-                                        await showDatePicker(
-                                      context: context,
-                                      initialDate: DateTime.now(),
-                                      firstDate: DateTime.utc(2010, 10, 16),
-                                      lastDate: DateTime.utc(2090, 10, 16),
-                                      builder: (BuildContext context,
-                                          Widget? child) {
-                                        return Theme(
-                                          data: ThemeData.light().copyWith(
-                                            colorScheme:
-                                                const ColorScheme.light()
-                                                    .copyWith(
-                                              primary: Theme.of(context)
-                                                  .primaryColor, // Set primary color to green
-                                            ), // Set background color to white
-                                          ),
-                                          child: child ?? const SizedBox(),
-                                        );
-                                      },
-                                    );
-                                    if (selectedDate != null) {
-                                      setState(() {
-                                        dateController.text =
-                                            DateFormat('dd/MM/yyyy')
-                                                .format(selectedDate);
-                                      });
-                                    }
-                                  },
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      MainButton(
-                        onTap: () async {
-                          await selectImage();
-                        },
-                        color: Theme.of(context).colorScheme.secondary,
-                        title: 'Select Receipt',
-                        margin: 20.0,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 15.0, top: 15.0),
+                    ),
+                    Expanded(
+                      child: Center(
                         child: Text(
-                          fill(title, width: 20),
+                          'Add Receipt',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                               color: Theme.of(context).primaryColor),
                         ),
                       ),
-                      Expanded(child: Container()),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20.0),
-                        child: MainButton(
-                          onTap: () async {
-                            List<String> errors = [];
-
-                            if (_dropdownValue.isEmpty) {
-                              errors.add('- Please select a merchant.');
-                            }
-
-                            if (dateController.text.isEmpty ||
-                                !RegExp(r'^\d{2}/\d{2}/\d{4}$')
-                                    .hasMatch(dateController.text)) {
-                              errors.add(
-                                  '- Add/Select date with the format: dd-mm-yyyy.');
-                            }
-
-                            if (filename.isEmpty) {
-                              errors.add(
-                                  '- Please select an image of your receipt.');
-                            }
-
-                            if (errors.isNotEmpty) {
-                              showMessage(errors.join('\n\n'),
-                                  "Missing/Incorrect fields");
-                            } else {
-                              try {
-                                showDialog(
-                                  context: context,
-                                  barrierDismissible: false,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      content: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: const [
-                                          SizedBox(height: 20),
-                                          Loading(message: 'Uploading Receipt...',),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                );
-                                dynamic pic = _image == null
-                                    ? ''
-                                    : await DatabaseService(
-                                            uid: user!.uid, email: user.email!)
-                                        .uploadReceiptPicture(
-                                            _image!, filename);
-                                String? merchantId = merchantsData.firstWhere(
-                                    (merchant) =>
-                                        merchant['Name'] ==
-                                        _dropdownValue)['Id'];
-                                await DatabaseService(
-                                        uid: user!.uid, email: user.email!)
-                                    .updateReceiptPicture(
-                                        'Users/${user.uid}/$filename',
-                                        dateController.text,
-                                        merchantId!,
-                                        _dropdownValue,
-                                        'Upload');
-                                if (mounted) {
-                                  Navigator.of(context).pop();
-                                }
-                                showMessage(
-                                    'Receipt was successfully uploaded.',
-                                    'Uploaded Receipt');
-                              } catch (e) {
-                                print(e);
-                                if (mounted) {
-                                  Navigator.of(context).pop();
-                                }
-                                showMessage(
-                                    'Something went wrong with the upload. Check your internet connection.',
-                                    'Could not upload');
-                              }
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        // Just for padding
+                      },
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: Theme.of(context).cardColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                  padding: const EdgeInsets.only(
+                      left:12, right: 12, bottom: 15),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Container(
+                    padding: const EdgeInsets.all(20.0),
+                    color: Theme.of(context).primaryColor,
+                    height: 150,
+                    child: Column(
+                      children: [
+                        DropdownButtonFormField<String>(
+                          dropdownColor: Theme.of(context).primaryColor,
+                          decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.all(5),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondary,
+                                  width: 3.0),
+                            ),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Theme.of(context)
+                                      .cardColor,
+                                  width: 3.0),
+                            ),
+                          ),
+                          items: merchants,
+                          iconEnabledColor: Theme.of(context).cardColor,
+                          style: TextStyle(
+                            color: Theme.of(context).cardColor,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          value: _dropdownValue.isEmpty
+                              ? null
+                              : _dropdownValue,
+                          hint: Text(
+                            'Select Merchant',
+                            style: TextStyle(
+                              color: Theme.of(context).cardColor,
+                            ),
+                          ),
+                          onChanged: (String? value) {
+                            if (value is String) {
+                              setState(() {
+                                _dropdownValue = value;
+                              });
                             }
                           },
-                          color: Theme.of(context).primaryColor,
-                          title: 'Save',
-                          margin: 20.0,
                         ),
-                      ),
-                    ],
+                        const SizedBox(
+                          height: 14,
+                        ),
+                        TextFormField(
+                          decoration: InputDecoration(
+                            hintText: 'Date: dd/mm/yyyy',
+                            fillColor: Theme.of(context).cardColor,
+                            filled: true,
+                          ),
+                          controller: dateController,
+                          onTap: () async {
+                            DateTime? selectedDate =
+                                await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime.utc(2010, 10, 16),
+                              lastDate: DateTime.utc(2090, 10, 16),
+                              builder: (BuildContext context,
+                                  Widget? child) {
+                                return Theme(
+                                  data: ThemeData.light().copyWith(
+                                    colorScheme:
+                                        const ColorScheme.light()
+                                            .copyWith(
+                                      primary: Theme.of(context)
+                                          .primaryColor, // Set primary color to green
+                                    ), // Set background color to white
+                                  ),
+                                  child: child ?? const SizedBox(),
+                                );
+                              },
+                            );
+                            if (selectedDate != null) {
+                              setState(() {
+                                dateController.text =
+                                    DateFormat('dd/MM/yyyy')
+                                        .format(selectedDate);
+                              });
+                            }
+                          },
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              )),
+              ),
+              MainButton(
+                onTap: () async {
+                  await selectImage();
+                },
+                color: Theme.of(context).colorScheme.secondary,
+                title: 'Select Receipt',
+                margin: 12.0,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 15.0, top: 15.0),
+                child: Text(
+                  fill(title, width: 32),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Theme.of(context).primaryColor),
+                ),
+              ),
+              Flexible(child: Container()),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                child: MainButton(
+                  onTap: () async {
+                    List<String> errors = [];
+
+                    if (_dropdownValue.isEmpty) {
+                      errors.add('- Please select a merchant.');
+                    }
+
+                    if (dateController.text.isEmpty ||
+                        !RegExp(r'^\d{2}/\d{2}/\d{4}$')
+                            .hasMatch(dateController.text)) {
+                      errors.add(
+                          '- Add/Select date with the format: dd-mm-yyyy.');
+                    }
+
+                    if (filename.isEmpty) {
+                      errors.add(
+                          '- Please select an image of your receipt.');
+                    }
+
+                    if (errors.isNotEmpty) {
+                      showMessage(errors.join('\n\n'),
+                          "Missing/Incorrect fields");
+                    } else {
+                      try {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return const AlertDialog(
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SizedBox(height: 20),
+                                  Loading(message: 'Uploading Receipt...',),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                        dynamic pic = _image == null
+                            ? ''
+                            : await DatabaseService(
+                                    uid: user!.uid, email: user.email!)
+                                .uploadReceiptPicture(
+                                    _image!, filename);
+                        String? merchantId = merchantsData.firstWhere(
+                            (merchant) =>
+                                merchant['Name'] ==
+                                _dropdownValue)['Id'];
+                        await DatabaseService(
+                                uid: user!.uid, email: user.email!)
+                            .updateReceiptPicture(
+                                'Users/${user.uid}/$filename',
+                                dateController.text,
+                                merchantId!,
+                                _dropdownValue,
+                                'Upload');
+                        if (mounted) {
+                          Navigator.of(context).pop();
+                        }
+
+                        // Clear from
+                        setState(() {
+                          _dropdownValue = '';
+                          dateController.clear();
+                          _image = null;
+                          title = '';
+                          filename = '';
+                        });
+                        showMessage(
+                            'Receipt was successfully uploaded.',
+                            'Uploaded Receipt');
+                      } catch (e) {
+                        print(e);
+                        if (mounted) {
+                          Navigator.of(context).pop();
+                        }
+                        showMessage(
+                            'Something went wrong with the upload. Check your internet connection.',
+                            'Could not upload');
+                      }
+                    }
+                  },
+                  color: Theme.of(context).primaryColor,
+                  title: 'Save',
+                  margin: 12.0,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -24,9 +24,9 @@ class _CodesState extends State<Codes> {
         title: Stack(
           alignment: Alignment.center,
           children: [
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Icon(Icons.receipt_long, size: 28),
                 SizedBox(width: 2),
                 Text(
@@ -75,7 +75,7 @@ class _CodesState extends State<Codes> {
                     child: Container(
                       alignment: Alignment.topCenter,
                       color: Theme.of(context).cardColor,
-                      padding: EdgeInsets.all(15),
+                      padding: const EdgeInsets.all(15),
                       child: Column(
                         children: [
                           Row(

@@ -1,6 +1,7 @@
 import 'package:digislip/components/button.dart';
 import 'package:digislip/screens/authenticate/auth_loading.dart';
 import 'package:digislip/services/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
@@ -58,24 +59,21 @@ class _RegisterState extends State<Register> with WidgetsBindingObserver {
   }
 
   Future<void> registerInWithEmail(String email, String password) async {
-    try {
-      setState(() {
-        loading = true;
-      });
-      dynamic result = await _auth.RegisterEmailAndPassword(email, password);
-      if (result == null) {
-        setState(() {
-          loading = false;
-          error = 'Could not create account. Enter a valid email.';
-          showMessage(error, 'Not valid');
-        });
-      }
-    } catch (e) {
-      print(e);
+    setState(() {
+      loading = true;
+    });
+    dynamic result = await _auth.RegisterEmailAndPassword(email, password);
+
+    if (mounted) {
       setState(() {
         loading = false;
-        error = 'Could not create account. Enter a valid email.';
-        showMessage(error, 'Not valid');
+        if (result.runtimeType == FirebaseAuthException) {
+          error = result.message;
+          showMessage(
+              error,
+              result.code.toString()[0].toUpperCase() +
+                  result.code.toString().substring(1));
+        }
       });
     }
   }
@@ -84,7 +82,6 @@ class _RegisterState extends State<Register> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     final x = MediaQuery.of(context).size.height;
     final smallScreen = x < 700;
-    print(x);
 
     return loading
         ? const AuthLoading(
@@ -248,6 +245,13 @@ class _RegisterState extends State<Register> with WidgetsBindingObserver {
                                       });
                                       return 'Password cannot be empty.';
                                     } else {
+                                      if (val.length < 6) {
+                                        setState(() {
+                                          _passwordError = true;
+                                        });
+                                        return 'Password has to be at least 6 characters long.';
+                                      }
+
                                       setState(() {
                                         _passwordError = false;
                                       });
@@ -448,7 +452,8 @@ class _RegisterState extends State<Register> with WidgetsBindingObserver {
                                                 'Sign In',
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
-                                                    fontSize: smallScreen ? 14 : 16,
+                                                    fontSize:
+                                                        smallScreen ? 14 : 16,
                                                     color: Theme.of(context)
                                                         .colorScheme
                                                         .secondary),
@@ -458,7 +463,8 @@ class _RegisterState extends State<Register> with WidgetsBindingObserver {
                                       Text(
                                         '2023 - Copyright - DigiSlips',
                                         style: TextStyle(
-                                            color: Colors.grey, fontSize: smallScreen ? 14 : 16),
+                                            color: Colors.grey,
+                                            fontSize: smallScreen ? 14 : 16),
                                       ),
                                     ],
                                   ),

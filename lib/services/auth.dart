@@ -26,9 +26,8 @@ class AuthService {
       User? user = result.user;
       await DatabaseService(uid: user!.uid, email: user.email!).createUserData();
       return _userFromFirebaseUser(user);
-    } catch (e) {
-      print(e.toString());
-      return null;
+    } on FirebaseAuthException catch(e) {
+      return e;
     }
   }
 
@@ -41,9 +40,8 @@ class AuthService {
       await DatabaseService(uid: user!.uid, email: user.email!)
           .createUserData();
       return _userFromFirebaseUser(user);
-    } catch (e) {
-      print(e.toString());
-      return null;
+    } on FirebaseAuthException catch(e) {
+      return e;
     }
   }
 
@@ -52,9 +50,8 @@ class AuthService {
     try {
       await _auth.sendPasswordResetEmail(email: email);
       return 'Email has been sent.';
-    } catch (e) {
-      print(e);
-      return null;
+    } on FirebaseAuthException catch(e) {
+      return e;
     }
   }
 
@@ -78,9 +75,8 @@ class AuthService {
       await DatabaseService(uid: result.user!.uid, email: result.user!.email!)
           .createUserData();
       return result;
-    } catch (e) {
-      print(e);
-      return null;
+    } on FirebaseAuthException catch(e) {
+      return e;
     }
   }
 
@@ -88,9 +84,8 @@ class AuthService {
   Future signOut() async {
     try {
       return _auth.signOut();
-    } catch (e) {
-      print(e.toString());
-      return null;
+    } on FirebaseAuthException catch(e) {
+      return e;
     }
   }
 }

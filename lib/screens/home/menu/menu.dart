@@ -37,7 +37,7 @@ class _MenuState extends State<Menu> {
         title: Stack(
           alignment: Alignment.center,
           children: [
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.receipt_long, size: 28),

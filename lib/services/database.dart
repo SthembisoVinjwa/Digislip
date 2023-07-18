@@ -174,13 +174,11 @@ class DatabaseService {
     final CollectionReference receiptsCollection =
         userDoc.collection('Receipts');
 
-    final snapshot = await receiptsCollection.get();
-
     await receiptsCollection.add({
       'Data': data,
       'Receiptdate': date,
       'Merchantid': merchantId,
-      'Storename': merchantName,
+      'Merchantname': merchantName,
       'Type': type,
     });
   }

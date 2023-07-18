@@ -77,7 +77,7 @@ class _DashboardState extends State<Dashboard> {
             child: Column(
               children: [
                 Expanded(
-                  flex: 10,
+                  flex: 11,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
                     child: GestureDetector(
@@ -102,7 +102,7 @@ class _DashboardState extends State<Dashboard> {
                 ),
                 Expanded(flex: 1, child: Container()),
                 Expanded(
-                  flex: 14,
+                  flex: 16,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 20),
                     child: ClipRRect(

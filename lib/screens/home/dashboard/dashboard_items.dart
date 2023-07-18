@@ -89,7 +89,7 @@ class _DashboardItemsState extends State<DashboardItems> {
           child: child,
         ),
         child: Container(
-          constraints: const BoxConstraints(maxWidth: 500, maxHeight: 150),
+          constraints: const BoxConstraints(maxWidth: 200, maxHeight: 150),
           width: 120,
           height: 70,
           padding: const EdgeInsets.fromLTRB(10, 16, 16, 10),

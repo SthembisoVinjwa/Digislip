@@ -1,6 +1,5 @@
 import 'package:digislip/models/user.dart';
 import 'package:digislip/components/loading.dart';
-import 'package:digislip/screens/home/dashboard/items/reciepts/receipt_card.dart';
 import 'package:digislip/screens/home/dashboard/items/vouchers/voucher_card.dart';
 import 'package:digislip/services/auth.dart';
 import 'package:digislip/services/database.dart';
